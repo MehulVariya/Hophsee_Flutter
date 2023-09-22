@@ -1,7 +1,6 @@
-// ignore_for_file: file_names
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
 import 'package:hophseeflutter/ui/home/register_screen.dart';
 import '../../core/widget/custom_text_field.dart';
 import '../../core/widget/text_with_ink_well.dart';
@@ -19,6 +18,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailIdController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isDoctor = false; // Track whether the user is a Doctor
+  ApiServiceImpl apiService = ApiServiceImpl(Dio());
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +66,24 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
 
+            // Checkbox for Doctor login
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: <Widget>[
+                  Checkbox(
+                    value: isDoctor,
+                    onChanged: (value) {
+                      setState(() {
+                        isDoctor = value!;
+                      });
+                    },
+                  ),
+                  const Text('Login as Doctor'),
+                ],
+              ),
+            ),
+
             // Login Button
             Center(
               child: Padding(
@@ -74,26 +93,41 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      ApiServiceImpl(Dio())
-                          .login(
-                              emailIdController.text, passwordController.text)
-                          .then((value) {
-                        // Run extra code here
-                        if (value.error == 0) {
-                          print("login api: $value");
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
-                            ),
-                            (route) => false,
-                          );
-                        } else {
-                          //not login
-                        }
-                      }, onError: (error) {
-                        print(error);
-                      });
+                      var email = emailIdController.text;
+                      var password = passwordController.text;
+                      if (isDoctor) {
+                        apiService.loginDoctor(email, password).then((value) {
+                          if (value.error == 0) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DoctorHome(),
+                              ),
+                              (route) => false,
+                            );
+                          } else {
+                            //wrong Doctor email & password
+                          }
+                        }, onError: (error) {
+                          print(error);
+                        });
+                      } else {
+                        apiService.loginUser(email, password).then((value) {
+                          if (value.error == 0) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ),
+                              (route) => false,
+                            );
+                          } else {
+                            //wrong user email & password
+                          }
+                        }, onError: (error) {
+                          print(error);
+                        });
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightBlueAccent,
@@ -151,6 +185,3 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 }
-
-
-

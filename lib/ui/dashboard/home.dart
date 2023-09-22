@@ -157,6 +157,7 @@ class HeaderDesign extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.onPress,
+    this.imagePath = "",
     this.endIcon = true,
   }) : super(key: key);
 
@@ -164,6 +165,7 @@ class HeaderDesign extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPress;
   final bool endIcon;
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +188,7 @@ class HeaderDesign extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
-                child: Image.asset('assets/pimage.png'),
+                child: Image.network(imagePath),
               ),
             ),
             const SizedBox(width: 16.0),

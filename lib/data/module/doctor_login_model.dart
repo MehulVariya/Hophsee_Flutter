@@ -1,11 +1,11 @@
-class Login {
+class DoctorLogin {
   int? error;
   String? message;
   Data? data;
 
-  Login({this.error, this.message, this.data});
+  DoctorLogin({this.error, this.message, this.data});
 
-  Login.fromJson(Map<String, dynamic> json) {
+  DoctorLogin.fromJson(Map<String, dynamic> json) {
     error = json['error'];
     message = json['message'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
@@ -28,29 +28,31 @@ class Login {
 }
 
 class Data {
-  String? user;
-  int? userId;
+  String? doctorName;
+  int? doctorId;
   String? lastLogin;
+  String? imageUrl;
 
-  Data({this.user, this.userId, this.lastLogin});
+  Data({this.doctorName, this.doctorId, this.lastLogin, this.imageUrl});
 
   Data.fromJson(Map<String, dynamic> json) {
-    user = json['user'];
-    userId = json['user_id'];
+    doctorName = json['doctor_name'];
+    doctorId = json['doctor_id'];
     lastLogin = json['last_login'];
+    imageUrl = json['image_url'];
   }
 
   @override
   String toString() {
-    return 'Data{user: $user, userId: $userId, lastLogin: $lastLogin}';
+    return 'Data{doctorName: $doctorName, doctorId: $doctorId, lastLogin: $lastLogin, imageUrl : $imageUrl}';
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user'] = this.user;
-    data['user_id'] = this.userId;
+    data['doctor_name'] = this.doctorName;
+    data['doctor_id'] = this.doctorId;
     data['last_login'] = this.lastLogin;
+    data['image_url'] = this.imageUrl;
     return data;
   }
 }
-

@@ -36,6 +36,7 @@ class _DoctorHomeState extends State<DoctorHome> {
           children: [
             HeaderDesign(
               title: "Kaushik Variya",
+              imagePath: ,
               icon: Icons.perm_identity,
               onPress: () {
                 Navigator.pushAndRemoveUntil(
