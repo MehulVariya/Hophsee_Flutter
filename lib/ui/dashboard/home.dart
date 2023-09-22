@@ -186,7 +186,7 @@ class HeaderDesign extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
-                child: Image.asset('pimage.png'),
+                child: Image.asset('assets/pimage.png'),
               ),
             ),
             const SizedBox(width: 16.0),

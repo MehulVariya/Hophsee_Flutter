@@ -4,6 +4,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/ui/dashboard/HomeScreen.dart';
+import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
 
 void main() {
   runApp(DevicePreview(
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         // Define dark theme properties.
       ),
       initialRoute: 'HomeScreen',
-      home: const HomeScreen(),
+      home: DoctorHome(),
     );
   }
 }

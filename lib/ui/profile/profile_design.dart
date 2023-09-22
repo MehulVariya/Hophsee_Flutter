@@ -36,7 +36,7 @@ class _ProfileDesignState extends State<ProfileDesign> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: Image.asset('pimage.png'),
+                  child: Image.asset('assets/pimage.png'),
                 ),
               ),
             ),
