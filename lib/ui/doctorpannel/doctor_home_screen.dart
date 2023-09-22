@@ -36,15 +36,14 @@ class _DoctorHomeState extends State<DoctorHome> {
           children: [
             HeaderDesign(
               title: "Kaushik Variya",
-              imagePath: ,
+              imagePath: "",
               icon: Icons.perm_identity,
               onPress: () {
-                Navigator.pushAndRemoveUntil(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const ProfileDesign(),
                   ),
-                  (route) => false,
                 );
               },
             ),
@@ -58,7 +57,7 @@ class _DoctorHomeState extends State<DoctorHome> {
                     return Card(
                       elevation:
                           5.0, // Add elevation to the cards for a material look
-                      margin: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.symmetric(
                           vertical: 8.0, horizontal: 20.0), // Adjust margin
                       child: ListTile(
                         leading: ClipRRect(
@@ -74,7 +73,7 @@ class _DoctorHomeState extends State<DoctorHome> {
                         ),
                         title: Text(
                           patients[index].name,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold, // Bold text
                           ),
                         ),
@@ -85,7 +84,7 @@ class _DoctorHomeState extends State<DoctorHome> {
                             color: Colors.grey, // Text color
                           ),
                         ),
-                        trailing: Icon(
+                        trailing: const Icon(
                           Icons
                               .arrow_forward, // Add a trailing icon for a more interactive feel
                           color: Colors.blue, // Icon color

@@ -6,7 +6,8 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         //title: Text('Help Me'),
-        backgroundColor: Colors.cyan,
+
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: EdgeInsets.only(

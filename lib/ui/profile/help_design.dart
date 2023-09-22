@@ -6,7 +6,7 @@ class HelpMePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         //title: Text('Help Me'),
-        backgroundColor: Colors.cyan,
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 50, left: 15, right: 15, bottom: 10),

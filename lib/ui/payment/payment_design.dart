@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/ui/doctordetails/appoinment.dart';
 import 'package:hophseeflutter/ui/payment/payment_done.dart';
+
+import '../dashboard/HomeScreen.dart';
 
 class PaymentDesign extends StatefulWidget {
   const PaymentDesign({
@@ -24,6 +27,23 @@ class _PaymentDesignState extends State<PaymentDesign> {
           padding: const EdgeInsets.only(top: 80),
           child: Column(
             children: [
+              Align(
+                alignment: Alignment.topLeft, // Align to the top-left corner
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AppointmentDesign1(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
               Center(
                 child: Column(
                   children: [
@@ -220,12 +240,11 @@ class PaymentBottomSheet extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const PaymentDoneDesign(),
                       ),
-                      (route) => false,
                     );
                   }
                 },

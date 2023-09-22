@@ -25,12 +25,11 @@ class _PaymentDoneDesignState extends State<PaymentDoneDesign> {
                 alignment: Alignment.topLeft, // Align to the top-left corner
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const HomeScreen(),
                       ),
-                      (route) => false,
                     );
                   },
                   icon: const Icon(

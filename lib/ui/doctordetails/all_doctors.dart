@@ -14,6 +14,10 @@ class _AllDoctorDesignState extends State<AllDoctorDesign> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        //title: Text('Help Me'),
+        backgroundColor: Colors.white,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 50),
@@ -31,27 +35,7 @@ class _AllDoctorDesignState extends State<AllDoctorDesign> {
                     );
                   }),
               const Divider(),
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 25),
-              //   child: SizedBox(
-              //     width: 350,
-              //     child: TextFormField(
-              //       decoration: const InputDecoration(
-              //           hintText: 'Search',
-              //           labelText: 'Search',
-              //           prefixIcon: Icon(
-              //             Icons.search_outlined,
-              //             color: Colors.grey,
-              //           ),
-              //           errorStyle: TextStyle(fontSize: 20.0),
-              //           border: OutlineInputBorder(
-              //               borderSide: BorderSide(color: Colors.black),
-              //               borderRadius:
-              //                   BorderRadius.all(Radius.circular(9.0)))),
-              //     ),
-              //   ),
-              // ),
-              Text(
+              const Text(
                 'Here Is The list of all the doctors\nwho are providing services here.',
                 style: TextStyle(
                   fontSize: 19,
@@ -59,10 +43,8 @@ class _AllDoctorDesignState extends State<AllDoctorDesign> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 16),
-
+              const SizedBox(height: 16),
               const Divider(),
-
               const SizedBox(
                 height: 10,
               ),

@@ -358,12 +358,11 @@ class DoctorHorizontal extends StatelessWidget {
             description: "Description $index",
             imagePath: "assets/doctor.png", // Use custom image
             onPressed: () {
-              Navigator.pushAndRemoveUntil(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const AppointmentDesign1(),
                 ),
-                (route) => false,
               );
             },
           );

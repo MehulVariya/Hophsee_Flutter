@@ -1,28 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-void main() {
-  runApp(ProfileApp());
-}
-
-class ProfileApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Colors.blue, // Change the primary color
-        fontFamily: 'Roboto', // Use a custom font family
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Profile'),
-        ),
-        body: ShowProfileDesign(),
-      ),
-    );
-  }
-}
-
 class ShowProfileDesign extends StatefulWidget {
   @override
   _ShowProfileDesignState createState() => _ShowProfileDesignState();
@@ -34,7 +12,7 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
   String mobileNumber = '';
   String emailAddress = '';
   String gender = 'Male'; // Default gender value
-  String profilePhotoUrl = 'pimage.png'; // Profile photo URL
+  String profilePhotoUrl = 'assets/pimage.png'; // Profile photo URL
 
   // Store the previous values for canceling changes
   String prevName = '';
@@ -65,6 +43,10 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        //title: Text('Help Me'),
+        backgroundColor: Colors.white,
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),

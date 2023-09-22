@@ -22,42 +22,19 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
     bool isButtonEnabled = selectedDate.isNotEmpty && selectedTime.isNotEmpty;
 
     return Scaffold(
+      appBar: AppBar(
+        //title: Text('Help Me'),
+
+        backgroundColor: Colors.white,
+      ),
       body: Stack(
         // Wrap the Scaffold with a Stack
         children: [
-          // Positioned(
-          //   left: 16, // Adjust the left position as needed
-          //   top: 16, // Adjust the top position as needed
-          //   child: IconButton(
-          //     icon: const Icon(Icons.arrow_back), // Your back icon
-          //     onPressed: () {
-          //       Navigator.pushAndRemoveUntil(
-          //           context,
-          //           MaterialPageRoute(
-          //             builder: (context) => const AllDoctorDesign(),
-          //           ),
-          //           (route) => false); // Handle the back button press
-          //     },
-          //   ),
-          // ),
           SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(top: 50),
               child: Column(
                 children: [
-                  // HeaderDesign(
-                  //   Title: "Kaushik Variya",
-                  //   icon: Icons.perm_identity,
-                  //   onPress: () {
-                  //     Navigator.pushAndRemoveUntil(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const ProfileDesign(),
-                  //       ),
-                  //       (route) => false,
-                  //     );
-                  //   },
-                  // ),
                   HeaderDesign(
                       title: 'Kaushik Variya',
                       icon: Icons.cabin_outlined,
@@ -73,7 +50,8 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
                     height: 2,
                   ),
                   const SizedBox(height: 10),
-                  DoctorDetailView(name: "Mehul Variya", description: 'Physio'),
+                  const DoctorDetailView(
+                      name: "Mehul Variya", description: 'Physio'),
                   const SizedBox(height: 10),
                   const Divider(
                     height: 2,
@@ -110,12 +88,12 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
                     child: ElevatedButton(
                       onPressed: isButtonEnabled
                           ? () {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const PaymentDesign(),
-                                  ),
-                                  (route) => false);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PaymentDesign(),
+                                ),
+                              );
                             }
                           : null, // Disable the button if date or time is not selected
                       style: ElevatedButton.styleFrom(
