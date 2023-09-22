@@ -9,14 +9,14 @@ import '../../data/datasource/api_services.dart';
 import '../dashboard/HomeScreen.dart';
 import 'forget_password_bottom_sheet.dart';
 
-class Mylogin extends StatefulWidget {
-  const Mylogin({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<Mylogin> createState() => _MyloginState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _MyloginState extends State<Mylogin> {
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailIdController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -133,7 +133,7 @@ class _MyloginState extends State<Mylogin> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const RegisterDesign(),
+                    builder: (context) => const RegisterScreen(),
                   ),
                 );
               },
@@ -151,3 +151,6 @@ class _MyloginState extends State<Mylogin> {
     super.dispose();
   }
 }
+
+
+

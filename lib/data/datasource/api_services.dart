@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 import '../../core/constant.dart';
 import '../module/login_model.dart';
+import '../module/response_query.dart';
+import '../module/user_model.dart';
 
 abstract class ApiService {
   Future<Login> login(String email, String password);
+  Future<ResponseQuery> registerUser(User user,File file);
 }
 
 class ApiServiceImpl extends ApiService {
@@ -32,5 +37,36 @@ class ApiServiceImpl extends ApiService {
 
   Map<String, dynamic> getErrorMap(String errorMessage) {
     return {"error": true,"message": errorMessage,"data":null};
+  }
+
+
+
+  @override
+  Future<ResponseQuery> registerUser(User user, File file) async{
+    try {
+      String fileName = file.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "image_url": await MultipartFile.fromFile(file.path, filename:fileName),
+        "user_name":user.userName,
+        "email_id":user.emailId,
+        "phone_no":user.phoneNo,
+        "password":user.password,
+        "gender":user.gender,
+        "date_of_birth":user.dateOfBirth,
+        "is_doctor":user.isDoctor,
+        "is_active":user.isActive
+
+      });
+      print("formdata : $formData");
+      final response =await dio.post(
+        "$host$userEp",
+        data: formData,
+      );
+      ResponseQuery registerUserResponse = ResponseQuery.fromJson(response.data);
+      print("Api Response login : ${registerUserResponse.toString()}");
+      return registerUserResponse;
+    } on Exception catch (error) {
+      return ResponseQuery.fromJson(getErrorMap("Http Error"));
+    }
   }
 }

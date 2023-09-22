@@ -1,17 +1,17 @@
-class User {
+class UserModel {
   int? error;
   String? message;
-  List<Data>? data;
+  List<User>? data;
 
-  User({this.error, this.message, this.data});
+  UserModel({this.error, this.message, this.data});
 
-  User.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     error = json['error'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <User>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new User.fromJson(v));
       });
     }
   }
@@ -27,7 +27,7 @@ class User {
   }
 }
 
-class Data {
+class User {
   int? userId;
   String? userName;
   String? emailId;
@@ -44,7 +44,7 @@ class Data {
   int? isDoctor;
   int? isActive;
 
-  Data(
+  User(
       {this.userId,
         this.userName,
         this.emailId,
@@ -61,7 +61,7 @@ class Data {
         this.isDoctor,
         this.isActive});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  User.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
     userName = json['user_name'];
     emailId = json['email_id'];
