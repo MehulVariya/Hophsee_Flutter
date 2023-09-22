@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:hophseeflutter/ui/profile/profile_design.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+
+void main() {
+  runApp(ProfileApp());
+}
+
+class ProfileApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.blue, // Change the primary color
+        fontFamily: 'Roboto', // Use a custom font family
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Profile'),
+        ),
+        body: ShowProfileDesign(),
+      ),
+    );
+  }
+}
 
 class ShowProfileDesign extends StatefulWidget {
   @override
@@ -12,9 +33,16 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
   String lastName = '';
   String mobileNumber = '';
   String emailAddress = '';
-  String gender = 'Male'; // Set a default gender value
+  String gender = 'Male'; // Default gender value
+  String profilePhotoUrl = 'pimage.png'; // Profile photo URL
 
-  // Define a map to associate titles with leading icons
+  // Store the previous values for canceling changes
+  String prevName = '';
+  String prevLastName = '';
+  String prevMobileNumber = '';
+  String prevEmailAddress = '';
+  String prevGender = 'Male';
+
   final Map<String, IconData> leadingIcons = {
     'Name': Icons.person,
     'Last Name': Icons.person,
@@ -24,81 +52,77 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
   };
 
   @override
+  void initState() {
+    super.initState();
+    // Initialize previous values
+    prevName = name;
+    prevLastName = lastName;
+    prevMobileNumber = mobileNumber;
+    prevEmailAddress = emailAddress;
+    prevGender = gender;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ProfileDesign(),
-                ),
-                (route) => false);
-          },
-        ),
-      ),
       backgroundColor: Colors.white,
-      body: ListView(
-        padding: EdgeInsets.only(top: 20),
-        children: [
-          _buildEditableCard(
-            context,
-            'Name',
-            name,
-            (newValue) {
-              setState(() {
-                name = newValue;
-              });
-            },
-          ),
-          _buildEditableCard(
-            context,
-            'Last Name',
-            lastName,
-            (newValue) {
-              setState(() {
-                lastName = newValue;
-              });
-            },
-          ),
-          _buildEditableCard(
-            context,
-            'Mobile Number',
-            mobileNumber,
-            (newValue) {
-              setState(() {
-                mobileNumber = newValue;
-              });
-            },
-          ),
-          _buildEditableCard(
-            context,
-            'Email Address',
-            emailAddress,
-            (newValue) {
-              setState(() {
-                emailAddress = newValue;
-              });
-            },
-          ),
-          _buildEditableCard(
-            context,
-            'Gender',
-            gender,
-            (newValue) {
-              setState(() {
-                gender = newValue;
-              });
-            },
-            isGenderField: true, // Indicate that this is the gender field
-          ),
-        ],
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 20),
+            CircleAvatar(
+              radius: 60.0,
+              backgroundImage: AssetImage(profilePhotoUrl),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: () {
+                // Add logic to edit profile photo here
+              },
+              icon: Icon(Icons.edit),
+              label: Text('Edit Photo'),
+            ),
+            _buildEditableCard(
+              context,
+              'Name',
+              name,
+              (newValue) => setState(() => name = newValue),
+            ),
+            _buildEditableCard(
+              context,
+              'Last Name',
+              lastName,
+              (newValue) => setState(() => lastName = newValue),
+            ),
+            _buildEditableCard(
+              context,
+              'Mobile Number',
+              mobileNumber,
+              (newValue) => setState(() => mobileNumber = newValue),
+            ),
+            _buildEditableCard(
+              context,
+              'Email Address',
+              emailAddress,
+              (newValue) => setState(() => emailAddress = newValue),
+            ),
+            _buildEditableCard(
+              context,
+              'Gender',
+              gender,
+              (newValue) => setState(() => gender = newValue),
+              isGenderField: true,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _showSaveAllDialog(context);
+              },
+              child: Text('Save All'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -108,7 +132,7 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
     String title,
     String subtitle,
     Function(String) onEdit, {
-    bool isGenderField = false, // Additional parameter for the gender field
+    bool isGenderField = false,
   }) {
     return GestureDetector(
       onTap: () {
@@ -119,18 +143,15 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
         }
       },
       child: Card(
-        margin: EdgeInsets.all(16.0),
         elevation: 4.0,
         child: ListTile(
           leading: Icon(
-            leadingIcons[title] ??
-                Icons
-                    .person, // Use the leading icon from the map or default to Icons.person
-            color: Colors.blue,
+            leadingIcons[title] ?? Icons.person,
+            color: Theme.of(context).primaryColor,
           ),
           title: Text(title),
           subtitle: Text(subtitle),
-          trailing: Icon(Icons.edit), // Edit button icon
+          trailing: Icon(Icons.edit),
         ),
       ),
     );
@@ -151,11 +172,8 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
           title: Text('Edit $title'),
           content: TextField(
             decoration: InputDecoration(labelText: title),
-            onChanged: (value) {
-              editedValue =
-                  value; // Update editedValue when the text field changes
-            },
-            controller: TextEditingController(text: initialValue),
+            onChanged: (value) => editedValue = value,
+            controller: TextEditingController(text: editedValue),
           ),
           actions: [
             ElevatedButton(
@@ -178,7 +196,9 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
   }
 
   Future<void> _showGenderSelectionDialog(
-      BuildContext context, String title) async {
+    BuildContext context,
+    String title,
+  ) async {
     final selectedGender = await showDialog<String>(
       context: context,
       builder: (context) {
@@ -189,21 +209,15 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
             children: [
               ListTile(
                 title: Text('Male'),
-                onTap: () {
-                  Navigator.of(context).pop('Male');
-                },
+                onTap: () => Navigator.of(context).pop('Male'),
               ),
               ListTile(
                 title: Text('Female'),
-                onTap: () {
-                  Navigator.of(context).pop('Female');
-                },
+                onTap: () => Navigator.of(context).pop('Female'),
               ),
               ListTile(
                 title: Text('Other'),
-                onTap: () {
-                  Navigator.of(context).pop('Other');
-                },
+                onTap: () => Navigator.of(context).pop('Other'),
               ),
             ],
           ),
@@ -212,27 +226,53 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
     );
 
     if (selectedGender != null) {
-      setState(() {
-        gender = selectedGender;
-      });
+      setState(() => gender = selectedGender);
     }
   }
-}
 
-void main() {
-  runApp(ProfileApp());
-}
-
-class ProfileApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(''),
-        ),
-        body: ShowProfileDesign(),
-      ),
+  Future<void> _showSaveAllDialog(BuildContext context) async {
+    // Create a dialog to choose between saving and canceling all changes
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Save All Changes?'),
+          content: Text('Do you want to save all changes?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // Save
+              },
+              child: Text('Save All'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Cancel
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
     );
+
+    if (result != null && result) {
+      // Save button was pressed, keep the changes
+      prevName = name;
+      prevLastName = lastName;
+      prevMobileNumber = mobileNumber;
+      prevEmailAddress = emailAddress;
+      prevGender = gender;
+      // Add your logic to save all changes here
+    } else {
+      // Cancel button was pressed, restore previous values
+      setState(() {
+        name = prevName;
+        lastName = prevLastName;
+        mobileNumber = prevMobileNumber;
+        emailAddress = prevEmailAddress;
+        gender = prevGender;
+      });
+    }
   }
 }

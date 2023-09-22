@@ -1,27 +1,13 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(DoctorAppointmentApp());
-}
-
-class DoctorAppointmentApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Doctor Appointment App',
-      home: HelpMePage(),
-    );
-  }
-}
-
 class HelpMePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Help Me'),
-      //   backgroundColor: Colors.blue,
-      // ),
+      appBar: AppBar(
+        //title: Text('Help Me'),
+        backgroundColor: Colors.cyan,
+      ),
       body: Padding(
         padding: EdgeInsets.only(top: 50, left: 15, right: 15, bottom: 10),
         child: Column(

@@ -20,17 +20,16 @@ class _AllDoctorDesignState extends State<AllDoctorDesign> {
           child: Column(
             children: [
               HeaderDesign(
-                Title: "Kaushik Variya",
-                icon: Icons.perm_identity,
-                onPress: () {
-                  Navigator.pushAndRemoveUntil(
+                  title: 'Kaushik Variya',
+                  icon: Icons.cabin_outlined,
+                  onPress: () {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const ProfileDesign(),
                       ),
-                      (route) => false);
-                },
-              ),
+                    );
+                  }),
               const Divider(),
               // Padding(
               //   padding: const EdgeInsets.only(top: 25),

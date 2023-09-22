@@ -59,7 +59,7 @@ class _HomeState extends State<HomeScreen> {
     Widget widget;
     switch (index) {
       case 0:
-        widget = const Myhome();
+        widget = const MyHome();
         break;
       case 1:
         widget = const AppointmentDesign1();
@@ -71,7 +71,7 @@ class _HomeState extends State<HomeScreen> {
         widget = const ProfileDesign();
         break;
       default:
-        widget = const Myhome();
+        widget = const MyHome();
         break;
     }
     return widget;

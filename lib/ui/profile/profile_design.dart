@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/ui/profile/help_design.dart';
 import 'package:hophseeflutter/ui/profile/setting.dart';
 import 'package:hophseeflutter/ui/profile/show_profile.dart';
 
 import '../home/login_screen.dart';
-import 'help_design.dart';
-
 
 class ProfileDesign extends StatefulWidget {
   const ProfileDesign({super.key});
@@ -140,7 +139,7 @@ class _ProfileDesignState extends State<ProfileDesign> {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
+                          builder: (context) => Mylogin(),
                         ),
                         (route) => false);
                   },
@@ -194,7 +193,7 @@ class ProfileMenu extends StatelessWidget {
               width: 35,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(200),
-                color: Colors.white,
+                //color: Colors.white,
               ),
               child: const Icon(
                 Icons.arrow_forward_ios,

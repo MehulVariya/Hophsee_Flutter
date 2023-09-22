@@ -1,23 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../doctordetails/all_doctors.dart';
 import '../doctordetails/appoinment.dart';
 import '../profile/profile_design.dart';
 import 'doctor_card.dart';
 
-class Myhome extends StatefulWidget {
-  const Myhome({super.key});
+class MyHome extends StatefulWidget {
+  const MyHome({Key? key}) : super(key: key);
 
   @override
-  State<Myhome> createState() => _MyhomeState();
+  State<MyHome> createState() => _MyHomeState();
 }
 
-class _MyhomeState extends State<Myhome> {
+class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
-    // Get the screen width
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -25,7 +23,7 @@ class _MyhomeState extends State<Myhome> {
           child: Column(
             children: [
               HeaderDesign(
-                Title: "Kaushik Variya",
+                title: "Kaushik Variya",
                 icon: Icons.perm_identity,
                 onPress: () {
                   Navigator.pushAndRemoveUntil(
@@ -41,7 +39,7 @@ class _MyhomeState extends State<Myhome> {
               Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
                 child: SizedBox(
-                  width: screenWidth < 400 ? screenWidth - 32 : 350,
+                  width: 350,
                   child: TextFormField(
                     decoration: const InputDecoration(
                       hintText: 'Search',
@@ -60,7 +58,6 @@ class _MyhomeState extends State<Myhome> {
                 ),
               ),
               const Divider(),
-              // Head doctor details
               const Padding(
                 padding: EdgeInsets.only(left: 15),
                 child: Row(
@@ -76,10 +73,9 @@ class _MyhomeState extends State<Myhome> {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.only(top: 5, bottom: 5),
-                  child: AdvertisementCard()),
-
-              // Categories control
+                padding: const EdgeInsets.only(top: 5, bottom: 5),
+                child: AdvertisementCard(),
+              ),
               const Divider(),
               const Padding(
                 padding: EdgeInsets.only(left: 15, top: 10),
@@ -95,7 +91,6 @@ class _MyhomeState extends State<Myhome> {
                   ],
                 ),
               ),
-
               const SizedBox(
                 height: 10,
               ),
@@ -119,7 +114,7 @@ class _MyhomeState extends State<Myhome> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(200, 0, 0, 0),
+                      padding: const EdgeInsets.only(right: 20, left: 170),
                       child: InkWell(
                         onTap: () {
                           Navigator.pushAndRemoveUntil(
@@ -159,13 +154,13 @@ class _MyhomeState extends State<Myhome> {
 class HeaderDesign extends StatelessWidget {
   const HeaderDesign({
     Key? key,
-    required this.Title,
+    required this.title,
     required this.icon,
     required this.onPress,
     this.endIcon = true,
   }) : super(key: key);
 
-  final String Title;
+  final String title;
   final IconData icon;
   final VoidCallback onPress;
   final bool endIcon;
@@ -196,7 +191,7 @@ class HeaderDesign extends StatelessWidget {
             ),
             const SizedBox(width: 16.0),
             Text(
-              Title,
+              title,
               style: const TextStyle(
                   fontSize: 20,
                   color: Colors.black,

@@ -45,24 +45,35 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
               padding: const EdgeInsets.only(top: 50),
               child: Column(
                 children: [
+                  // HeaderDesign(
+                  //   Title: "Kaushik Variya",
+                  //   icon: Icons.perm_identity,
+                  //   onPress: () {
+                  //     Navigator.pushAndRemoveUntil(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const ProfileDesign(),
+                  //       ),
+                  //       (route) => false,
+                  //     );
+                  //   },
+                  // ),
                   HeaderDesign(
-                    Title: "Kaushik Variya",
-                    icon: Icons.perm_identity,
-                    onPress: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ProfileDesign(),
-                        ),
-                        (route) => false,
-                      );
-                    },
-                  ),
+                      title: 'Kaushik Variya',
+                      icon: Icons.cabin_outlined,
+                      onPress: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileDesign(),
+                          ),
+                        );
+                      }),
                   const Divider(
                     height: 2,
                   ),
                   const SizedBox(height: 10),
-                  const DoctorDetailView(name: "Mehul Variya", description: 'Physio'),
+                  DoctorDetailView(name: "Mehul Variya", description: 'Physio'),
                   const SizedBox(height: 10),
                   const Divider(
                     height: 2,
@@ -147,10 +158,9 @@ class DoctorDetailView extends StatelessWidget {
     return Container(
         width: double.infinity,
         height: 220,
-        padding:
-            const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         child: DoctorCard(
-          name: "Doctor : $name",
+          name: "Dr. $name",
           description: "$description",
           isOpenBookBtn: false,
           imagePath: "assets/doctor.png", // Use custom image
