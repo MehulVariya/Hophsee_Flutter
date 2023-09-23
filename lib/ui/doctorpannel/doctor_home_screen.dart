@@ -35,7 +35,6 @@ class _DoctorHomeState extends State<DoctorHome> {
         child: Column(
           children: [
             HeaderDesign(
-              title: "Kaushik Variya",
               imagePath: "",
               icon: Icons.perm_identity,
               onPress: () {

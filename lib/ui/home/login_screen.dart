@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
 import 'package:hophseeflutter/ui/home/register_screen.dart';
+import '../../core/constant.dart';
+import '../../core/share_preference.dart';
 import '../../core/widget/custom_text_field.dart';
 import '../../core/widget/text_with_ink_well.dart';
 import '../../data/datasource/api_services.dart';
@@ -98,13 +100,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (isDoctor) {
                         apiService.loginDoctor(email, password).then((value) {
                           if (value.error == 0) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DoctorHome(),
-                              ),
-                              (route) => false,
-                            );
+                            if (value.data?.doctorId != null) {
+                              var doctor = value.data;
+                              Preference.putDataUserDetails(doctor?.doctorName,
+                                  doctor?.imageUrl, doctor?.doctorId,
+                                  isDoctor: true);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DoctorHome(),
+                                ),
+                                (route) => false,
+                              );
+                            } else {
+                              // doctor id not found
+                            }
                           } else {
                             //wrong Doctor email & password
                           }
@@ -114,13 +124,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       } else {
                         apiService.loginUser(email, password).then((value) {
                           if (value.error == 0) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomeScreen(),
-                              ),
-                              (route) => false,
-                            );
+                            if (value.data?.userId != null) {
+                              var user = value.data;
+                              Preference.putDataUserDetails(
+                                  user?.userName, user?.imageUrl, user?.userId);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeScreen(),
+                                ),
+                                (route) => false,
+                              );
+                            } else {
+                              //doctor id
+                            }
                           } else {
                             //wrong user email & password
                           }

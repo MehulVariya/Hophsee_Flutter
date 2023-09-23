@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/core/constant.dart';
+import 'package:hophseeflutter/core/share_preference.dart';
+import 'package:provider/provider.dart';
 
 import '../doctordetails/all_doctors.dart';
 import '../doctordetails/appoinment.dart';
@@ -23,7 +28,6 @@ class _MyHomeState extends State<MyHome> {
           child: Column(
             children: [
               HeaderDesign(
-                title: "Kaushik Variya",
                 icon: Icons.perm_identity,
                 onPress: () {
                   Navigator.pushAndRemoveUntil(
@@ -31,7 +35,7 @@ class _MyHomeState extends State<MyHome> {
                     MaterialPageRoute(
                       builder: (context) => const ProfileDesign(),
                     ),
-                    (route) => false,
+                        (route) => false,
                   );
                 },
               ),
@@ -122,7 +126,7 @@ class _MyHomeState extends State<MyHome> {
                             MaterialPageRoute(
                               builder: (context) => const AllDoctorDesign(),
                             ),
-                            (route) => false,
+                                (route) => false,
                           );
                         },
                         child: const Text(
@@ -151,58 +155,118 @@ class _MyHomeState extends State<MyHome> {
   }
 }
 
-class HeaderDesign extends StatelessWidget {
-  const HeaderDesign({
+class HeaderDesign extends StatefulWidget {
+  HeaderDesign({
     Key? key,
-    required this.title,
     required this.icon,
     required this.onPress,
     this.imagePath = "",
     this.endIcon = true,
   }) : super(key: key);
-
-  final String title;
   final IconData icon;
   final VoidCallback onPress;
   final bool endIcon;
   final String imagePath;
 
   @override
+  State<HeaderDesign> createState() => _HeaderDesignState();
+}
+
+class _HeaderDesignState extends State<HeaderDesign> {
+  final StreamController<String> _controller = StreamController<String>();
+
+  // Getter to get the stream associated with this controller.
+  Stream<String> get stream => _controller.stream;
+
+  final StreamController<String> _image_controller = StreamController<String>();
+
+  // Getter to get the stream associated with this controller.
+  Stream<String> get image_stream => _image_controller.stream;
+
+
+  @override
   Widget build(BuildContext context) {
+    changeData();
     return GestureDetector(
-      onTap: onPress,
+      onTap: widget.onPress,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 7.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.blue, // Border color
-                  width: 3.0, // Border width
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.network(imagePath),
-              ),
+            StreamBuilder<String>(
+              stream: image_stream, // Access the custom stream
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.blue, // Border color
+                          width: 3.0, // Border width
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: Image.network(snapshot.data.toString()),
+                      ),
+                    );
+                } else {
+                  return const Text(
+                    "Image",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  );
+                }
+              },
             ),
             const SizedBox(width: 16.0),
-            Text(
-              title,
-              style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-            ),
+            StreamBuilder<String>(
+              stream: stream, // Access the custom stream
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(
+                    snapshot.data.toString(),
+                    style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  );
+                } else {
+                  return const Text(
+                    "Name",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  );
+                }
+              },
+            )
           ],
         ),
       ),
     );
+  }
+
+  void changeData() async {
+    Map<String,String?> value = await Preference.getUserDetailsFromSharedPreferences();
+    print("Name Of the user $value");
+    _controller.sink.add(value["name"].toString());
+    String imageUrl = value["image_url"].toString();
+    print("image_url : $imageUrl");
+    _image_controller.sink.add(imageUrl);
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.close();
+    _image_controller.close();
   }
 }
 
@@ -227,8 +291,8 @@ class AdvertisementCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: AssetImage(
-                      'assets/Advertisement.png'), // Replace with your image path
+                  image: AssetImage('assets/Advertisement.png'),
+                  // Replace with your image path
                   fit: BoxFit.cover,
                 ),
               ),
@@ -309,27 +373,28 @@ class Categorieslist1 extends StatelessWidget {
           SingleChildScrollView(
             child: Row(
               children: Categorieslist.map(
-                (e) => CupertinoButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AllDoctorDesign(),
-                        ));
-                  },
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Container(
-                    width: 145,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: e.color,
-                      borderRadius: BorderRadius.circular(20),
+                    (e) =>
+                    CupertinoButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AllDoctorDesign(),
+                            ));
+                      },
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Container(
+                        width: 145,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: e.color,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Text(e.Text),
+                        ),
+                      ),
                     ),
-                    child: Center(
-                      child: Text(e.Text),
-                    ),
-                  ),
-                ),
               ).toList(),
             ),
           ),

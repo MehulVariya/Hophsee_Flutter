@@ -36,7 +36,6 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
               child: Column(
                 children: [
                   HeaderDesign(
-                      title: 'Kaushik Variya',
                       icon: Icons.cabin_outlined,
                       onPress: () {
                         Navigator.push(
