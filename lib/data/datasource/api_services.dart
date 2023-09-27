@@ -65,22 +65,36 @@ class ApiServiceImpl extends ApiService {
   Future<ResponseQuery> registerUser(User user, File file) async {
     try {
       String fileName = file.path.split('/').last;
+      print("File Path ${file.path} file name : $fileName");
+      String userName = user.userName ?? "";
+      String emailId = user.emailId ?? "";
+      String phoneNo = user.phoneNo ?? "";
+      String password = user.password ?? "";
+      String gender = user.gender ?? "";
+      String dateOfBirth = user.dateOfBirth ?? "";
+      bool isDoctor = false;
+      bool isActive =true;
       FormData formData = FormData.fromMap({
         "image_url":
             await MultipartFile.fromFile(file.path, filename: fileName),
-        "user_name": user.userName,
-        "email_id": user.emailId,
-        "phone_no": user.phoneNo,
-        "password": user.password,
-        "gender": user.gender,
-        "date_of_birth": user.dateOfBirth,
-        "is_doctor": user.isDoctor,
-        "is_active": user.isActive
+        "user_name": userName,
+        "email_id": emailId,
+        "phone_no": phoneNo,
+        "password": password,
+        "gender": gender,
+        "date_of_birth": dateOfBirth,
+        "is_doctor": isDoctor,
+        "is_active": isActive
       });
-      print("formdata : $formData");
-      final response = await dio.post(
-        "$host$userEp",
+      print("formdata : ${formData.fields}");
+    final response = await dio.post(
+        userEp,
         data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
       );
       ResponseQuery registerUserResponse =
           ResponseQuery.fromJson(response.data);

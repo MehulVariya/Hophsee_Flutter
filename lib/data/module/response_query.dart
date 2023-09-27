@@ -11,6 +11,11 @@ class ResponseQuery {
     data = json['data'] != null ? new Result.fromJson(json['data']) : null;
   }
 
+  @override
+  String toString() {
+    return 'ResponseQuery{error: $error, message: $message, data: $data}';
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['error'] = this.error;
@@ -52,6 +57,11 @@ class Result {
     message = json['message'];
     protocol41 = json['protocol41'];
     changedRows = json['changedRows'];
+  }
+
+  @override
+  String toString() {
+    return 'Result{fieldCount: $fieldCount, affectedRows: $affectedRows, insertId: $insertId, serverStatus: $serverStatus, warningCount: $warningCount, message: $message, protocol41: $protocol41, changedRows: $changedRows}';
   }
 
   Map<String, dynamic> toJson() {

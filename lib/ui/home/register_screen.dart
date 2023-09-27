@@ -154,19 +154,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           var userName = firstNameController.text;
                           var email = emailController.text;
                           var mobile = mobileController.text;
-                          var password = mobileController.text;
+                          var password = passwordController.text;
                           var gender = selectedGender;
                           var dateOfBirth = DateFormat("dd-MM-yyyy").format(
                               _selectedDate);
-                          var isActive = 1;
                           var user = User(userName: userName,
                               emailId: email,
                               phoneNo: mobile,
                               password: password,
                               gender: gender.substring(0,1),
-                              dateOfBirth: dateOfBirth,
-                              isDoctor: 0,
-                              isActive: isActive);
+                              dateOfBirth: dateOfBirth);
                           print("user : ${user.toJson()}");
                           ApiServiceImpl(Dio())
                               .registerUser(

@@ -41,8 +41,8 @@ class User {
   String? lastLogin;
   String? createDt;
   String? updateDt;
-  int? isDoctor;
-  int? isActive;
+  bool isDoctor=false;
+  bool isActive=true;
 
   User(
       {this.userId,
@@ -58,8 +58,8 @@ class User {
         this.lastLogin,
         this.createDt,
         this.updateDt,
-        this.isDoctor,
-        this.isActive});
+        this.isDoctor=false,
+        this.isActive=true});
 
   User.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
