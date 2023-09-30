@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/core/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/share_preference.dart';
 import '../../core/widget/custom_text_field.dart';
 import '../../core/widget/date_picker.dart';
 import '../../data/datasource/api_services.dart';
@@ -42,10 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            top: MediaQuery
-                .of(context)
-                .size
-                .height * 0.1,
+            top: MediaQuery.of(context).size.height * 0.1,
           ),
           child: Form(
             child: Column(
@@ -55,14 +54,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.2,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.4,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width * 0.4,
                         child: Image.asset(
                           'assets/applogo2.png',
                           fit: BoxFit.cover,
@@ -73,9 +66,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 20),
                 const Divider(),
-                ElevatedButton(onPressed: (){
-                _getImageFromUser();
-                }, child: Text("Upload")),
+                ElevatedButton(
+                    onPressed: () {
+                      _getImageFromUser();
+                    },
+                    child: Text("Upload")),
                 const SizedBox(height: 5),
                 // Text fields for first name and last name
                 TextFieldDesign(
@@ -144,10 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: SizedBox(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.5,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
@@ -156,30 +148,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           var mobile = mobileController.text;
                           var password = passwordController.text;
                           var gender = selectedGender;
-                          var dateOfBirth = DateFormat("dd-MM-yyyy").format(
-                              _selectedDate);
-                          var user = User(userName: userName,
+                          var dateOfBirth =
+                              DateFormat("dd-MM-yyyy").format(_selectedDate);
+                          var user = User(
+                              userName: userName,
                               emailId: email,
                               phoneNo: mobile,
                               password: password,
-                              gender: gender.substring(0,1),
+                              gender: gender.substring(0, 1),
                               dateOfBirth: dateOfBirth);
                           print("user : ${user.toJson()}");
                           ApiServiceImpl(Dio())
-                              .registerUser(
-                          user, imageFile)
+                              .registerUser(user, imageFile)
                               .then((value) {
                             // Run extra code here
                             if (value.error == 0) {
-                              print("login api: $value");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
-                                ),
-                              );
+                              loginUser(ApiServiceImpl(Dio()), context, email,
+                                  password);
                             } else {
-                              //not login
+                              showSnackbar(context, "Something went wrong");
                             }
                           }, onError: (error) {
                             print(error);
@@ -213,7 +200,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 // const Divider(),
 
                 const SizedBox(height: 20),
-
               ],
             ),
           ),
@@ -224,13 +210,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void pickDateDialog() {
     showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        //which date will display when user open the picker
-        firstDate: DateTime(1950),
-        //what will be the previous supported year in picker
-        lastDate: DateTime
-            .now()) //what will be the up to supported date in picker
+            context: context,
+            initialDate: DateTime.now(),
+            //which date will display when user open the picker
+            firstDate: DateTime(1950),
+            //what will be the previous supported year in picker
+            lastDate: DateTime
+                .now()) //what will be the up to supported date in picker
         .then((pickedDate) {
       //then usually do the future job
       if (pickedDate == null) {
@@ -246,8 +232,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _getImageFromUser() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource
-        .gallery); // You can also use ImageSource.camera to take a new photo.
+    final pickedFile = await picker.pickImage(
+        source: ImageSource
+            .gallery); // You can also use ImageSource.camera to take a new photo.
 
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);

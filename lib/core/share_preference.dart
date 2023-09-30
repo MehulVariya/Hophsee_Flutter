@@ -61,4 +61,26 @@ class Preference {
     data["image_url"] = prefs.getString(IMAGE_URL_PREFERENCE);
     return data;
   }
+
+  static Future<dynamic> clearData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(DOCTOR_ID_PREFERENCE);
+    prefs.remove(USER_ID_PREFERENCE);
+    prefs.remove(NAME_PREFERENCE);
+    prefs.remove(IMAGE_URL_PREFERENCE);
+    prefs.remove(IS_DOCTOR_PREFERENCE);
+  }
+
+  static Future<Map<String, dynamic>> getLoginConfig() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? doctorId = prefs.getInt(DOCTOR_ID_PREFERENCE);
+    int? userId = prefs.getInt(USER_ID_PREFERENCE);
+    bool? isDoctor = prefs.getBool(IS_DOCTOR_PREFERENCE);
+
+    bool isLogin = (doctorId != null) || (userId != null);
+    Map<String, dynamic> data = {};
+    data[IS_LOGIN] = isLogin;
+    data[IS_DOCTOR_PREFERENCE] = isDoctor;
+    return data;
+  }
 }

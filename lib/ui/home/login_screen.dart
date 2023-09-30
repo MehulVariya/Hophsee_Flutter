@@ -4,6 +4,7 @@ import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
 import 'package:hophseeflutter/ui/home/register_screen.dart';
 import '../../core/constant.dart';
 import '../../core/share_preference.dart';
+import '../../core/utils.dart';
 import '../../core/widget/custom_text_field.dart';
 import '../../core/widget/text_with_ink_well.dart';
 import '../../data/datasource/api_services.dart';
@@ -113,37 +114,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 (route) => false,
                               );
                             } else {
-                              // doctor id not found
+                              showSnackbar(context,"Something went wrong try again");
                             }
                           } else {
-                            //wrong Doctor email & password
+                            showSnackbar(context,"invalid email or password");
                           }
                         }, onError: (error) {
                           print(error);
                         });
                       } else {
-                        apiService.loginUser(email, password).then((value) {
-                          if (value.error == 0) {
-                            if (value.data?.userId != null) {
-                              var user = value.data;
-                              Preference.putDataUserDetails(
-                                  user?.userName, user?.imageUrl, user?.userId);
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
-                                ),
-                                (route) => false,
-                              );
-                            } else {
-                              //doctor id
-                            }
-                          } else {
-                            //wrong user email & password
-                          }
-                        }, onError: (error) {
-                          print(error);
-                        });
+                        loginUser(apiService,context,email,password);
                       }
                     },
                     style: ElevatedButton.styleFrom(
