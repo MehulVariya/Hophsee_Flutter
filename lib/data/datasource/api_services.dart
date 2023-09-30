@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:hophseeflutter/data/module/doctor_login_model.dart';
+import 'package:hophseeflutter/data/module/doctor_model.dart';
 
 import '../../core/constant.dart';
 import '../module/user_login_model.dart';
@@ -14,6 +15,9 @@ abstract class ApiService {
   Future<DoctorLogin> loginDoctor(String email, String password);
 
   Future<ResponseQuery> registerUser(User user, File file);
+
+  Future<DoctorList> getDoctorList();
+
 }
 
 class ApiServiceImpl extends ApiService {
@@ -102,6 +106,19 @@ class ApiServiceImpl extends ApiService {
       return registerUserResponse;
     } on Exception catch (error) {
       return ResponseQuery.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
+  @override
+  Future<DoctorList> getDoctorList() async{
+    try {
+      final response = await dio.get(
+        doctorEp,
+      );
+      DoctorList doctorsResponse = DoctorList.fromJson(response.data);
+      return doctorsResponse;
+    } on Exception catch (error) {
+      return DoctorList.fromJson(getErrorMap("Http Error"));
     }
   }
 }

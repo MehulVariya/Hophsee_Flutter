@@ -1,12 +1,14 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/core/constant.dart';
 import 'package:hophseeflutter/core/share_preference.dart';
+import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:provider/provider.dart';
 
-import '../doctordetails/all_doctors.dart';
+import '../doctordetails/doctor_list_screen.dart';
 import '../doctordetails/appoinment.dart';
 import '../profile/profile_design.dart';
 import 'doctor_card.dart';
@@ -19,6 +21,8 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
+  ApiServiceImpl apiService = ApiServiceImpl(Dio());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +39,7 @@ class _MyHomeState extends State<MyHome> {
                     MaterialPageRoute(
                       builder: (context) => const ProfileDesign(),
                     ),
-                        (route) => false,
+                    (route) => false,
                   );
                 },
               ),
@@ -121,13 +125,18 @@ class _MyHomeState extends State<MyHome> {
                       padding: const EdgeInsets.only(right: 20, left: 170),
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AllDoctorDesign(),
-                            ),
-                                (route) => false,
-                          );
+                          apiService.getDoctorList().then((value) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DoctorListScreen(doctorList: value),
+                              ),
+                                  (route) => false,
+                            );
+                          },
+                              onError: (error) {
+                            print(error);
+                          });
                         },
                         child: const Text(
                           'SEE ALL',
@@ -183,7 +192,6 @@ class _HeaderDesignState extends State<HeaderDesign> {
   // Getter to get the stream associated with this controller.
   Stream<String> get image_stream => _image_controller.stream;
 
-
   @override
   Widget build(BuildContext context) {
     changeData();
@@ -199,20 +207,20 @@ class _HeaderDesignState extends State<HeaderDesign> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.blue, // Border color
-                          width: 3.0, // Border width
-                        ),
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.blue, // Border color
+                        width: 3.0, // Border width
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image.network(snapshot.data.toString()),
-                      ),
-                    );
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Image.network(snapshot.data.toString()),
+                    ),
+                  );
                 } else {
                   return const Text(
                     "Image",
@@ -254,13 +262,15 @@ class _HeaderDesignState extends State<HeaderDesign> {
   }
 
   void changeData() async {
-    Map<String,String?> value = await Preference.getUserDetailsFromSharedPreferences();
+    Map<String, String?> value =
+        await Preference.getUserDetailsFromSharedPreferences();
     print("Name Of the user $value");
     _controller.sink.add(value["name"].toString());
     String imageUrl = value["image_url"].toString();
     print("image_url : $imageUrl");
     _image_controller.sink.add(imageUrl);
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -365,6 +375,8 @@ class Categorieslist1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ApiServiceImpl apiService = ApiServiceImpl(Dio());
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -373,28 +385,34 @@ class Categorieslist1 extends StatelessWidget {
           SingleChildScrollView(
             child: Row(
               children: Categorieslist.map(
-                    (e) =>
-                    CupertinoButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AllDoctorDesign(),
-                            ));
-                      },
-                      padding: const EdgeInsets.only(left: 15),
-                      child: Container(
-                        width: 145,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: e.color,
-                          borderRadius: BorderRadius.circular(20),
+                (e) => CupertinoButton(
+                  onPressed: () {
+                    apiService.getDoctorList().then((value) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DoctorListScreen(doctorList: value),
                         ),
-                        child: Center(
-                          child: Text(e.Text),
-                        ),
-                      ),
+                            (route) => false,
+                      );
+                    },
+                        onError: (error) {
+                          print(error);
+                        });
+                  },
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Container(
+                    width: 145,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: e.color,
+                      borderRadius: BorderRadius.circular(20),
                     ),
+                    child: Center(
+                      child: Text(e.Text),
+                    ),
+                  ),
+                ),
               ).toList(),
             ),
           ),

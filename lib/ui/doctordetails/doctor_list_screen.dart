@@ -1,21 +1,40 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-import '../dashboard/home.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:hophseeflutter/data/datasource/api_services.dart';
+import 'package:hophseeflutter/data/module/doctor_model.dart';
+
+import '../dashboard/dashboard.dart';
 import '../profile/profile_design.dart';
 
-class AllDoctorDesign extends StatefulWidget {
-  const AllDoctorDesign({super.key});
+class DoctorListScreen extends StatefulWidget {
+  DoctorList? doctorList;
+
+  DoctorListScreen({this.doctorList, super.key});
 
   @override
-  State<AllDoctorDesign> createState() => _AllDoctorDesignState();
+  State<DoctorListScreen> createState() => _DoctorListScreenState();
 }
 
-class _AllDoctorDesignState extends State<AllDoctorDesign> {
+class _DoctorListScreenState extends State<DoctorListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.doctorList == null) {
+      doctorList();
+    }
+    print("Doctor List All Doctor : ${widget.doctorList.toString()}");
+  }
+
+  void doctorList() async {
+    widget.doctorList = await ApiServiceImpl(Dio()).getDoctorList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //title: Text('Help Me'),
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../dashboard/home.dart';
+import '../dashboard/dashboard.dart';
 import '../profile/profile_design.dart';
 
 class DoctorHome extends StatefulWidget {

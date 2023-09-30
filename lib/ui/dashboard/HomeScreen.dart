@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import '../doctordetails/all_doctors.dart';
+import '../doctordetails/doctor_list_screen.dart';
 import '../doctordetails/appoinment.dart';
 import '../profile/profile_design.dart';
-import 'home.dart';
+import 'dashboard.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -48,7 +48,8 @@ class _HomeState extends State<HomeScreen> {
           });
         },
         height: 60,
-        color: Colors.lightBlueAccent, // Set the color to blue
+        color: Colors.lightBlueAccent,
+        // Set the color to blue
         backgroundColor: Colors.white,
         animationDuration: const Duration(milliseconds: 300),
       ),
@@ -65,7 +66,7 @@ class _HomeState extends State<HomeScreen> {
         widget = const AppointmentDesign1();
         break;
       case 2:
-        widget = const AllDoctorDesign();
+        widget = DoctorListScreen();
         break;
       case 3:
         widget = const ProfileDesign();

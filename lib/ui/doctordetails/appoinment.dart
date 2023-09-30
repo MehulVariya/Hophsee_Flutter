@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../dashboard/doctor_card.dart';
-import '../dashboard/home.dart';
+import '../dashboard/dashboard.dart';
 import '../payment/payment_design.dart';
 import '../profile/profile_design.dart';
 
