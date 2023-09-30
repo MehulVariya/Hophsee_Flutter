@@ -53,20 +53,22 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                     );
                   }),
               const Divider(),
-              const Text(
-                'Here Is The list of all the doctors\nwho are providing services here.',
-                style: TextStyle(
-                  fontSize: 19,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Divider(),
+              // Text(
+              //   'Here Is The list of all the doctors\nwho are providing services here.',
+              //   style: TextStyle(
+              //     fontSize: 19,
+              //     color: Colors.blue,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+              // const SizedBox(height: 16),
+              //const Divider(),
               const SizedBox(
                 height: 10,
               ),
-              const DoctorHorizontal()
+              DoctorHorizontal(
+                data: widget.doctorList?.data ?? [],
+              )
             ],
           ),
         ),

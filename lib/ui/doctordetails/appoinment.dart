@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/constant.dart';
+import '../../data/module/doctor_model.dart';
 import '../dashboard/doctor_card.dart';
 import '../dashboard/dashboard.dart';
 import '../payment/payment_design.dart';
@@ -24,7 +26,6 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
     return Scaffold(
       appBar: AppBar(
         //title: Text('Help Me'),
-
         backgroundColor: Colors.white,
       ),
       body: Stack(
@@ -49,8 +50,9 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
                     height: 2,
                   ),
                   const SizedBox(height: 10),
-                  const DoctorDetailView(
-                      name: "Mehul Variya", description: 'Physio'),
+                  DoctorDetailView(
+                    data: widget.doctorList?.data ?? [],
+                  ),
                   const SizedBox(height: 10),
                   const Divider(
                     height: 2,
@@ -119,37 +121,37 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
 }
 
 class DoctorDetailView extends StatelessWidget {
-  const DoctorDetailView({
-    Key? key,
-    required this.name,
-    required this.description,
-    //required this.imagePath,
-  }) : super(key: key);
-
-  final String name;
-  final String description;
-  //final String imagePath;
+  Doctor data;
+  DoctorDetailView({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.infinity,
-        height: 220,
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
-        child: DoctorCard(
-          name: "Dr. $name",
-          description: "$description",
-          isOpenBookBtn: false,
-          imagePath: "assets/doctor.png", // Use custom image
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AppointmentDesign1(),
-              ),
-            );
-          },
-        ));
+      width: double.infinity,
+      height: 500,
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+      child: 0.builder(
+        scrollDirection: Axis.vertical,
+        padding: const EdgeInsets.all(0),
+        itemCount: data,
+        itemBuilder: (BuildContext context, int index) {
+          Doctor doctor = data;
+          return DoctorCard(
+            name: "${doctor.doctorName}",
+            description: "${doctor.briefDesc}",
+            imagePath: "$host/${doctor.imageUrl}", // Use custom image
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AppointmentDesign1(),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }
 

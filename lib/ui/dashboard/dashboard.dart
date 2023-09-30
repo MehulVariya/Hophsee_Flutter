@@ -8,6 +8,7 @@ import 'package:hophseeflutter/core/share_preference.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/module/doctor_model.dart';
 import '../doctordetails/doctor_list_screen.dart';
 import '../doctordetails/appoinment.dart';
 import '../profile/profile_design.dart';
@@ -129,12 +130,12 @@ class _MyHomeState extends State<MyHome> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DoctorListScreen(doctorList: value),
+                                builder: (context) =>
+                                    DoctorListScreen(doctorList: value),
                               ),
-                                  (route) => false,
+                              (route) => false,
                             );
-                          },
-                              onError: (error) {
+                          }, onError: (error) {
                             print(error);
                           });
                         },
@@ -155,7 +156,9 @@ class _MyHomeState extends State<MyHome> {
                 height: 15,
               ),
               // Doctor list
-              const DoctorHorizontal(),
+              DoctorHorizontal(
+                data: [],
+              ),
             ],
           ),
         ),
@@ -391,14 +394,14 @@ class Categorieslist1 extends StatelessWidget {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DoctorListScreen(doctorList: value),
+                          builder: (context) =>
+                              DoctorListScreen(doctorList: value),
                         ),
-                            (route) => false,
+                        (route) => false,
                       );
-                    },
-                        onError: (error) {
-                          print(error);
-                        });
+                    }, onError: (error) {
+                      print(error);
+                    });
                   },
                   padding: const EdgeInsets.only(left: 15),
                   child: Container(
@@ -423,7 +426,8 @@ class Categorieslist1 extends StatelessWidget {
 }
 
 class DoctorHorizontal extends StatelessWidget {
-  const DoctorHorizontal({Key? key});
+  List<Doctor> data;
+  DoctorHorizontal({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -434,12 +438,13 @@ class DoctorHorizontal extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         padding: const EdgeInsets.all(0),
-        itemCount: 3,
+        itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
+          Doctor doctor = data[index];
           return DoctorCard(
-            name: "Doctor $index",
-            description: "Description $index",
-            imagePath: "assets/doctor.png", // Use custom image
+            name: "${doctor.doctorName}",
+            description: "${doctor.briefDesc}",
+            imagePath: "$host/${doctor.imageUrl}", // Use custom image
             onPressed: () {
               Navigator.push(
                 context,
