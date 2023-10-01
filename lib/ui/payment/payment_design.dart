@@ -107,7 +107,7 @@ class _PaymentDesignState extends State<PaymentDesign> {
                                         500 /*int.parse(_amountController.text)*/);
                               },
                             );
-                          
+
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,

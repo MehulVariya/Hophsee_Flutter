@@ -81,6 +81,9 @@ class _AppointmentDesignState extends State<AppointmentBookScreen> {
                     child: ElevatedButton(
                       onPressed: isButtonEnabled
                           ? () {
+                              int? doctorId = widget.doctor.doctorId;
+                              String? appoDt = selectedDate;
+                            //  String? appoDt = selectedDate;
                               Navigator.pushNamed(context, PaymentDesign.route);
                             }
                           : null,
