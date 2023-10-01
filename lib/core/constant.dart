@@ -1,6 +1,7 @@
-const host = "http://192.168.108.108:8000";
+const host = "http://192.168.12.108:8000";
 
 const userEp = "$host/users";
+const appoinments = "$host/appoinments";
 const loginUserEp = "$userEp/login";
 
 const doctorEp = "$host/doctors";

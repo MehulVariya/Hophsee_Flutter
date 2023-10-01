@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import '../../core/constant.dart';
 
 class AppointmentListScreen extends StatefulWidget {
   static const route = '/appointment_list_screen';
@@ -10,54 +14,30 @@ class AppointmentListScreen extends StatefulWidget {
 }
 
 class _AppointmentListScreenState extends State<AppointmentListScreen> {
-  // Sample list of appointments
-  final List<Appointment> appointments = [
-    Appointment(
-      patientName: 'John Doe',
-      doctorName: 'Dr. Smith',
-      date: '2023-09-20',
-      time: '10:00 AM',
-    ),
-    Appointment(
-      patientName: 'Jane Smith',
-      doctorName: 'Dr. Johnson',
-      date: '2023-09-22',
-      time: '2:30 PM',
-    ),
-    // Add more appointments as needed
-  ];
+  late AppoList appoList = AppoList(); // Initialize as an empty AppoList
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        /*appBar: AppBar(
-          title: Text('My Appointments'),
-          backgroundColor: Colors.blue, // Customize the app bar color
-        ),*/
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /*Text(
-                  'Upcoming Appointments',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue, // Customize the text color
-                  ),
-                ),*/
                 SizedBox(height: 16),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: appointments.length,
-                  itemBuilder: (context, index) {
-                    final appointment = appointments[index];
-                    return AppointmentCard(appointment: appointment);
-                  },
-                ),
+                if (appoList.data != null && appoList.data!.isNotEmpty)
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: appoList.data!.length,
+                    itemBuilder: (context, index) {
+                      final appointment = appoList.data![index];
+                      return AppointmentCard(appointment: appointment);
+                    },
+                  ),
+                if (appoList.data == null || appoList.data!.isEmpty)
+                  Text("No appointments available"),
               ],
             ),
           ),
@@ -67,22 +47,51 @@ class _AppointmentListScreenState extends State<AppointmentListScreen> {
   }
 }
 
-class Appointment {
-  final String patientName;
-  final String doctorName;
-  final String date;
-  final String time;
+class Appo {
+  int? appoId;
+  int? doctorId;
+  int? paymentId;
+  String? appoDt;
+  String? appoTime;
 
-  Appointment({
-    required this.patientName,
-    required this.doctorName,
-    required this.date,
-    required this.time,
+  Appo({
+    this.appoId,
+    this.doctorId,
+    this.appoDt,
+    this.appoTime,
   });
+
+  factory Appo.fromJson(Map<String, dynamic> json) {
+    return Appo(
+      appoId: json['appo_id'],
+      doctorId: json['doctor_id'],
+      appoDt: json['appo_dt'],
+      appoTime: json['appo_time'],
+    );
+  }
+}
+
+class AppoList {
+  int? error;
+  String? message;
+  List<Appo>? data;
+
+  AppoList({this.error, this.message, this.data = const []});
+
+  factory AppoList.fromJson(Map<String, dynamic> json) {
+    final List<dynamic>? jsonData = json['data'];
+    return AppoList(
+      error: json['error'],
+      message: json['message'],
+      data: jsonData != null
+          ? jsonData.map((v) => Appo.fromJson(v)).toList()
+          : [],
+    );
+  }
 }
 
 class AppointmentCard extends StatelessWidget {
-  final Appointment appointment;
+  final Appo appointment;
 
   AppointmentCard({required this.appointment});
 
@@ -97,35 +106,35 @@ class AppointmentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Patient: ${appointment.patientName}',
+              'Appointment ID: ${appointment.appoId}',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.black, // Customize the text color
+                color: Colors.black,
               ),
             ),
             SizedBox(height: 8),
             Text(
-              'Doctor: ${appointment.doctorName}',
+              'Doctor ID: ${appointment.doctorId}',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey, // Customize the text color
+                color: Colors.grey,
               ),
             ),
             SizedBox(height: 8),
             Text(
-              'Date: ${appointment.date}',
+              'Date: ${appointment.appoDt}',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey, // Customize the text color
+                color: Colors.grey,
               ),
             ),
             SizedBox(height: 8),
             Text(
-              'Time: ${appointment.time}',
+              'Time: ${appointment.appoTime}',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey, // Customize the text color
+                color: Colors.grey,
               ),
             ),
           ],

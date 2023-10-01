@@ -62,15 +62,15 @@ class _HomeState extends State<UserHomeScreen> {
     Widget widget;
     switch (index) {
       case 0:
+        widget = const MyHome();
+        break;
+      case 1:
         widget = DoctorListScreen(
           isBack: false,
         );
         break;
-      case 1:
-        widget = const MyHome();
-        break;
       case 2:
-        widget = const AppointmentListScreen();
+        widget = AppointmentListScreen();
         break;
       case 3:
         widget = const ProfileDesign(isNotBackArrow: false);
