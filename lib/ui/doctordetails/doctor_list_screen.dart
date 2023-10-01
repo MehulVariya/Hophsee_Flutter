@@ -4,7 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:hophseeflutter/data/module/doctor_model.dart';
+import 'package:hophseeflutter/ui/dashboard/doctors_list_view.dart';
 
+import '../../core/widget/custome_app_bar.dart';
 import '../dashboard/dashboard.dart';
 import '../profile/profile_design.dart';
 
@@ -42,7 +44,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
           padding: const EdgeInsets.only(top: 50),
           child: Column(
             children: [
-              HeaderDesign(
+              CustomAppBar(
                   icon: Icons.cabin_outlined,
                   onPress: () {
                     Navigator.push(
@@ -66,7 +68,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
               const SizedBox(
                 height: 10,
               ),
-              DoctorHorizontal(
+              DoctorsListView(
                 data: widget.doctorList?.data ?? [],
               )
             ],

@@ -3,6 +3,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hophseeflutter/ui/dashboard/HomeScreen.dart';
 import 'package:hophseeflutter/ui/dashboard/dashboard.dart';
 import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
         // Define dark theme properties.
       ),
       initialRoute: 'HomeScreen',
-      home: const SplashScreen(),
+      home: const SafeArea(child: SplashScreen()),
     );
   }
 }

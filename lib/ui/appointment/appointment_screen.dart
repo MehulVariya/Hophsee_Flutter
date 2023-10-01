@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/constant.dart';
+import '../../core/widget/custome_app_bar.dart';
 import '../../data/module/doctor_model.dart';
 import '../dashboard/doctor_card.dart';
-import '../dashboard/dashboard.dart';
 import '../payment/payment_design.dart';
 import '../profile/profile_design.dart';
 
-class AppointmentDesign1 extends StatefulWidget {
-  const AppointmentDesign1({super.key});
+class AppointmentScreen extends StatefulWidget {
+  final Doctor doctor;
+
+  const AppointmentScreen({super.key, required this.doctor});
 
   @override
-  State<AppointmentDesign1> createState() => _AppointmentDesignState();
+  State<AppointmentScreen> createState() => _AppointmentDesignState();
 }
 
-class _AppointmentDesignState extends State<AppointmentDesign1> {
+class _AppointmentDesignState extends State<AppointmentScreen> {
   String selectedDate = ''; // Variable to store the selected date
   String selectedTime = ''; // Variable to store the selected time
 
@@ -36,7 +38,7 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
               padding: const EdgeInsets.only(top: 50),
               child: Column(
                 children: [
-                  HeaderDesign(
+                  CustomAppBar(
                       icon: Icons.cabin_outlined,
                       onPress: () {
                         Navigator.push(
@@ -50,9 +52,12 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
                     height: 2,
                   ),
                   const SizedBox(height: 10),
-                  DoctorDetailView(
-                    data: widget.doctorList?.data ?? [],
-                  ),
+                  DoctorCard(
+                      name: widget.doctor.doctorName ?? "",
+                      description: widget.doctor.briefDesc ?? "",
+                      imagePath: widget.doctor.imageUrl ?? "",
+                      isOpenBookBtn: false,
+                      onPressed: () {}),
                   const SizedBox(height: 10),
                   const Divider(
                     height: 2,
@@ -96,7 +101,8 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
                                 ),
                               );
                             }
-                          : null, // Disable the button if date or time is not selected
+                          : null,
+                      // Disable the button if date or time is not selected
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isButtonEnabled
                             ? Colors.blue
@@ -120,52 +126,7 @@ class _AppointmentDesignState extends State<AppointmentDesign1> {
   }
 }
 
-class DoctorDetailView extends StatelessWidget {
-  Doctor data;
-  DoctorDetailView({required this.data, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 500,
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-      child: 0.builder(
-        scrollDirection: Axis.vertical,
-        padding: const EdgeInsets.all(0),
-        itemCount: data,
-        itemBuilder: (BuildContext context, int index) {
-          Doctor doctor = data;
-          return DoctorCard(
-            name: "${doctor.doctorName}",
-            description: "${doctor.briefDesc}",
-            imagePath: "$host/${doctor.imageUrl}", // Use custom image
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AppointmentDesign1(),
-                ),
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
 class TimeSelector extends StatefulWidget {
-  final List<String> availableTimes = List.generate(
-    5,
-    (index) {
-      final currentTime = DateTime.now();
-      final nextHour = currentTime.add(Duration(hours: index + 1));
-      final formattedTime = DateFormat('h:00 a').format(nextHour);
-      return formattedTime;
-    },
-  );
-
   final Function(String) onTimeSelected; // Callback for selected time
 
   TimeSelector({required this.onTimeSelected});
@@ -176,6 +137,15 @@ class TimeSelector extends StatefulWidget {
 
 class _TimeSelectorState extends State<TimeSelector> {
   String? selectedTime;
+  final List<String> availableTimes = List.generate(
+    5,
+    (index) {
+      final currentTime = DateTime.now();
+      final nextHour = currentTime.add(Duration(hours: index + 1));
+      final formattedTime = DateFormat('h:00 a').format(nextHour);
+      return formattedTime;
+    },
+  );
 
   void _handleTimeSelected(String time) {
     setState(() {
@@ -192,9 +162,9 @@ class _TimeSelectorState extends State<TimeSelector> {
       padding: const EdgeInsets.only(top: 5),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: widget.availableTimes.length,
+        itemCount: availableTimes.length,
         itemBuilder: (BuildContext context, int index) {
-          final time = widget.availableTimes[index];
+          final time = availableTimes[index];
           return TimeSlot(
             time: time,
             selected: selectedTime == time,
@@ -280,25 +250,12 @@ class TimeSlot extends StatelessWidget {
 }
 
 class DateSelector extends StatefulWidget {
-  final List<String> availableDates = DateSelector.getNextFiveDays();
   final Function(String) onDateSelected;
 
   DateSelector({required this.onDateSelected});
 
   @override
   _DateSelectorState createState() => _DateSelectorState();
-
-  static List<String> getNextFiveDays() {
-    final now = DateTime.now();
-    final dateList = <String>[];
-
-    for (int i = 0; i < 5; i++) {
-      final date = now.add(Duration(days: i));
-      final formattedDate = DateFormat('dd/MM/yyyy').format(date);
-      dateList.add(formattedDate);
-    }
-    return dateList;
-  }
 }
 
 class _DateSelectorState extends State<DateSelector> {
@@ -313,15 +270,16 @@ class _DateSelectorState extends State<DateSelector> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> availableDates = getNextFiveDays();
     return Container(
       width: double.infinity,
       height: 143,
       padding: const EdgeInsets.only(top: 5),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: widget.availableDates.length,
+        itemCount: availableDates.length,
         itemBuilder: (BuildContext context, int index) {
-          final date = widget.availableDates[index];
+          final date = availableDates[index];
           return DateSlot(
             date: date,
             selected: selectedDate == date,
@@ -332,6 +290,18 @@ class _DateSelectorState extends State<DateSelector> {
         },
       ),
     );
+  }
+
+  static List<String> getNextFiveDays() {
+    final now = DateTime.now();
+    final dateList = <String>[];
+
+    for (int i = 0; i < 5; i++) {
+      final date = now.add(Duration(days: i));
+      final formattedDate = DateFormat('dd/MM/yyyy').format(date);
+      dateList.add(formattedDate);
+    }
+    return dateList;
   }
 }
 

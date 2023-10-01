@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/widget/custome_app_bar.dart';
 import '../dashboard/dashboard.dart';
 import '../profile/profile_design.dart';
 
@@ -34,7 +35,7 @@ class _DoctorHomeState extends State<DoctorHome> {
         padding: const EdgeInsets.only(top: 40),
         child: Column(
           children: [
-            HeaderDesign(
+            CustomAppBar(
               imagePath: "",
               icon: Icons.perm_identity,
               onPress: () {

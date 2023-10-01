@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/constant.dart';
+
 class DoctorCard extends StatelessWidget {
   const DoctorCard({
     Key? key,
@@ -46,7 +48,7 @@ class DoctorCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 shape: BoxShape.rectangle,
                 image: DecorationImage(
-                  image: NetworkImage(imagePath),
+                  image: NetworkImage("$host/$imagePath"),
                   fit: BoxFit.cover,
                 ),
               ),

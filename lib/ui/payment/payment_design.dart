@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hophseeflutter/ui/doctordetails/appoinment.dart';
 import 'package:hophseeflutter/ui/payment/payment_done.dart';
 
-import '../dashboard/HomeScreen.dart';
+import '../appointment/appointment_screen.dart';
 
 class PaymentDesign extends StatefulWidget {
   const PaymentDesign({
@@ -31,12 +30,12 @@ class _PaymentDesignState extends State<PaymentDesign> {
                 alignment: Alignment.topLeft, // Align to the top-left corner
                 child: IconButton(
                   onPressed: () {
-                    Navigator.push(
+                    /*Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AppointmentDesign1(),
+                        builder: (context) => const AppointmentScreen(),
                       ),
-                    );
+                    );*/
                   },
                   icon: const Icon(
                     Icons.arrow_back,

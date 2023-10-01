@@ -174,10 +174,11 @@ class _ProfileDesignState extends State<ProfileDesign> {
                     },
                   ),
                   ProfileMenu(
-                    Title: "Log-Out",
+                    Title: "Logout",
                     icon: Icons.logout,
                     endIcon: false,
                     onPress: () {
+                      Preference.clearData();
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
@@ -194,14 +195,17 @@ class _ProfileDesignState extends State<ProfileDesign> {
       )),
     );
   }
+
   void changeData() async {
-    Map<String,String?> value = await Preference.getUserDetailsFromSharedPreferences();
+    Map<String, String?> value =
+        await Preference.getUserDetailsFromSharedPreferences();
     print("Name Of the user $value");
     _controller.sink.add(value["name"].toString());
     String imageUrl = value["image_url"].toString();
     print("image_url : $imageUrl");
     _image_controller.sink.add(imageUrl);
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

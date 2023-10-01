@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/core/share_preference.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
+import 'package:hophseeflutter/data/module/categories.dart';
 
 import '../ui/dashboard/HomeScreen.dart';
 
@@ -32,6 +33,39 @@ void loginUser(ApiServiceImpl apiService, BuildContext context, String email,
       showSnackbar(context, "invalid email or password");
     }
   }, onError: (error) {
-    showSnackbar(context, error);
+    showSnackbar(context, error.toString());
   });
+}
+
+List<Categories> getDoctorCategories() {
+  List<Categories> categories = [
+    Categories(
+      Text: 'Dentists',
+      color: const Color(0xffDCEDF9),
+    ),
+    Categories(
+      Text: 'Psychiatrists',
+      color: const Color(0xffFAF0DB),
+    ),
+    Categories(
+      Text: 'Surgeons',
+      color: const Color(0xffD6F6FF),
+    ),
+    Categories(
+      Text: 'Anesthesiologists',
+      color: const Color(0xffF2E3E9),
+    ),
+    Categories(
+      Text: 'Oncologists',
+      color: const Color(0xffF2E3E9),
+    ),
+  ];
+  return categories;
+}
+
+void hideKeyboard(BuildContext context) {
+  final currentFocus = FocusScope.of(context);
+  if (!currentFocus.hasPrimaryFocus) {
+    currentFocus.unfocus();
+  }
 }

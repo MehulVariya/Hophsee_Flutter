@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import '../appointment/appointment_screen.dart';
 import '../doctordetails/doctor_list_screen.dart';
-import '../doctordetails/appoinment.dart';
 import '../profile/profile_design.dart';
 import 'dashboard.dart';
 
@@ -18,10 +18,11 @@ class _HomeState extends State<HomeScreen> {
       Icons.home_outlined,
       size: 30,
     ),
+    /*
     Icon(
       Icons.calendar_today,
       size: 30,
-    ),
+    ),*/
     Icon(
       Icons.list_alt,
       size: 30,
@@ -61,14 +62,14 @@ class _HomeState extends State<HomeScreen> {
     switch (index) {
       case 0:
         widget = const MyHome();
-        break;
+        break; /*
       case 1:
-        widget = const AppointmentDesign1();
-        break;
-      case 2:
+        widget = const AppointmentScreen();
+        break;*/
+      case 1:
         widget = DoctorListScreen();
         break;
-      case 3:
+      case 2:
         widget = const ProfileDesign();
         break;
       default:

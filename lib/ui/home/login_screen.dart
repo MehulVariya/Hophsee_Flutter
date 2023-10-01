@@ -6,7 +6,7 @@ import '../../core/constant.dart';
 import '../../core/share_preference.dart';
 import '../../core/utils.dart';
 import '../../core/widget/custom_text_field.dart';
-import '../../core/widget/text_with_ink_well.dart';
+import '../../core/widget/common_label_with_tap.dart';
 import '../../data/datasource/api_services.dart';
 import '../dashboard/HomeScreen.dart';
 import 'forget_password_bottom_sheet.dart';
@@ -96,6 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
+                      hideKeyboard(context);
                       var email = emailIdController.text;
                       var password = passwordController.text;
                       if (isDoctor) {
@@ -114,16 +115,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 (route) => false,
                               );
                             } else {
-                              showSnackbar(context,"Something went wrong try again");
+                              showSnackbar(
+                                  context, "Something went wrong try again");
                             }
                           } else {
-                            showSnackbar(context,"invalid email or password");
+                            showSnackbar(context, "invalid email or password");
                           }
                         }, onError: (error) {
                           print(error);
                         });
                       } else {
-                        loginUser(apiService,context,email,password);
+                        loginUser(apiService, context, email, password);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -140,35 +142,48 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 40),
-
+            Row(children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                child: Text("Forgot Your Login Details ?"),
+              ),
+              const SizedBox(
+                width: 2,
+              ),
+              CommonLabelWithTap(
+                text: 'Get Help Logging In',
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const ForgotPasswordBottomSheet();
+                    },
+                  );
+                },
+              )
+            ]),
             // Forgot details
-            TextWithInkwell(
-              firstText: 'Forgot Your Login Details ?',
-              secondText: 'Get Help Logging In',
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const ForgotPasswordBottomSheet();
-                  },
-                );
-              },
-            ),
             const SizedBox(height: 10),
-
-            // register or signup code
-            TextWithInkwell(
-              firstText: 'Doesn\'t Have An Account ?',
-              secondText: 'Sign Up',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const RegisterScreen(),
-                  ),
-                );
-              },
-            ),
+            Row(children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                child: Text("Doesn\'t Have An Account ?"),
+              ),
+              const SizedBox(
+                width: 2,
+              ),
+              CommonLabelWithTap(
+                text: 'Sign Up',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegisterScreen(),
+                    ),
+                  );
+                },
+              ),
+            ]),
           ],
         ),
       ),
