@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:hophseeflutter/core/share_preference.dart';
 import 'package:hophseeflutter/data/module/doctor_login_model.dart';
 import 'package:hophseeflutter/data/module/doctor_model.dart';
+import 'package:hophseeflutter/data/module/payment_model.dart';
+import 'package:hophseeflutter/data/module/payment_page_required.dart';
 
 import '../../core/constant.dart';
 import '../module/user_login_model.dart';
@@ -18,6 +21,11 @@ abstract class ApiService {
 
   Future<DoctorList> getDoctorList();
 
+  Future<ResponseQuery> addPaymentDetails(
+      PaymentPageRequired paymentPageRequired, int amount);
+
+  Future<ResponseQuery> addAppointment(
+      PaymentPageRequired paymentPageRequired, int paymentId);
 }
 
 class ApiServiceImpl extends ApiService {
@@ -77,7 +85,7 @@ class ApiServiceImpl extends ApiService {
       String gender = user.gender ?? "";
       String dateOfBirth = user.dateOfBirth ?? "";
       bool isDoctor = false;
-      bool isActive =true;
+      bool isActive = true;
       FormData formData = FormData.fromMap({
         "image_url":
             await MultipartFile.fromFile(file.path, filename: fileName),
@@ -91,7 +99,7 @@ class ApiServiceImpl extends ApiService {
         "is_active": isActive
       });
       print("formdata : ${formData.fields}");
-    final response = await dio.post(
+      final response = await dio.post(
         userEp,
         data: formData,
         options: Options(
@@ -110,7 +118,7 @@ class ApiServiceImpl extends ApiService {
   }
 
   @override
-  Future<DoctorList> getDoctorList() async{
+  Future<DoctorList> getDoctorList() async {
     try {
       final response = await dio.get(
         doctorEp,
@@ -119,6 +127,69 @@ class ApiServiceImpl extends ApiService {
       return doctorsResponse;
     } on Exception catch (error) {
       return DoctorList.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
+  @override
+  Future<ResponseQuery> addPaymentDetails(
+      PaymentPageRequired paymentPageRequired, int amount) async {
+    try {
+      Map<String, dynamic> data = {};
+      data["payment_ref_no"] =
+          "${paymentPageRequired.doctorId}${DateTime.now()}";
+      int userId =
+          await Preference.getValueFromSharedPreferences(USER_ID_PREFERENCE);
+      data["payer_id"] = userId;
+      data["payee_id"] = 8;
+      data["payer_type"] = "user";
+      data["payee_type"] = "admin";
+      data["payment_ammount"] = amount;
+
+      final response = await dio.post(
+        paymentEp,
+        data: data,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json', // Set the Content-Type header
+          },
+        ),
+      );
+      ResponseQuery registerUserResponse =
+          ResponseQuery.fromJson(response.data);
+      return registerUserResponse;
+    } on Exception catch (error) {
+      return ResponseQuery.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
+  @override
+  Future<ResponseQuery> addAppointment(
+      PaymentPageRequired paymentPageRequired, int paymentId) async {
+    try {
+      Map<String, dynamic> data = {};
+      int userId =
+          await Preference.getValueFromSharedPreferences(USER_ID_PREFERENCE);
+      data["user_id"] = userId;
+      data["doctor_id"] = paymentPageRequired.doctorId;
+      data["payment_id"] = paymentId;
+      data["appo_dt"] = paymentPageRequired.appoDt;
+      data["appo_time"] = paymentPageRequired.appoTime;
+      data["is_approve"] = true;
+
+      final response = await dio.post(
+        appoEp,
+        data: data,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json', // Set the Content-Type header
+          },
+        ),
+      );
+      ResponseQuery registerUserResponse =
+          ResponseQuery.fromJson(response.data);
+      return registerUserResponse;
+    } on Exception catch (error) {
+      return ResponseQuery.fromJson(getErrorMap("Http Error"));
     }
   }
 }

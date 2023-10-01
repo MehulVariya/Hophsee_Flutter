@@ -4,11 +4,13 @@ import 'package:hophseeflutter/core/utils.dart';
 import 'package:hophseeflutter/ui/payment/payment_bottom_sheet.dart';
 import 'package:hophseeflutter/ui/payment/payment_done.dart';
 
+import '../../data/module/payment_page_required.dart';
 import '../appointment/appointment_book_screen.dart';
 
 class PaymentDesign extends StatefulWidget {
+  final PaymentPageRequired paymentPageRequired;
   const PaymentDesign({
-    super.key,
+    super.key,required this.paymentPageRequired
   });
 
   static const route = '/payment_screen';
@@ -103,6 +105,7 @@ class _PaymentDesignState extends State<PaymentDesign> {
                                     cardNumberController: _cardNumberController,
                                     expiryDateController: _expiryDateController,
                                     cvvController: _cvvController,
+                                    paymentPageRequired : widget.paymentPageRequired,
                                     amount:
                                         500 /*int.parse(_amountController.text)*/);
                               },

@@ -15,6 +15,8 @@ import 'package:hophseeflutter/ui/profile/profile_design.dart';
 import 'package:hophseeflutter/ui/profile/setting.dart';
 import 'package:hophseeflutter/ui/splash/splash_screen.dart';
 
+import 'data/module/payment_page_required.dart';
+
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     // Get the arguments passed when navigating to a screen.
@@ -40,7 +42,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ProfileDesign());
 
       case PaymentDesign.route:
-        return MaterialPageRoute(builder: (_) => const PaymentDesign());
+        return MaterialPageRoute(
+            builder: (_) => PaymentDesign(
+                paymentPageRequired: args as PaymentPageRequired));
 
       case PaymentDoneDesign.route:
         return MaterialPageRoute(

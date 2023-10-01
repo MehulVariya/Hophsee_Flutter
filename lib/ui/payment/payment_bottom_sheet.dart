@@ -1,19 +1,26 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:hophseeflutter/ui/payment/payment_done.dart';
+
+import '../../core/utils.dart';
+import '../../data/module/payment_page_required.dart';
 
 class PaymentBottomSheet extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController cardNumberController;
   final TextEditingController expiryDateController;
   final TextEditingController cvvController;
+  final PaymentPageRequired paymentPageRequired;
   final int amount;
 
-  const PaymentBottomSheet({
+  PaymentBottomSheet({
     super.key,
     required this.formKey,
     required this.cardNumberController,
     required this.expiryDateController,
     required this.cvvController,
+    required this.paymentPageRequired,
     required this.amount,
   });
 
@@ -41,6 +48,8 @@ class PaymentBottomSheet extends StatelessWidget {
     // Use the regex pattern to check if the input matches.
     return regex.hasMatch(input);
   }
+
+  ApiServiceImpl apiService = ApiServiceImpl(Dio());
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +116,35 @@ class PaymentBottomSheet extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
+                  /* if () {
+
+                        .then((value) => if()
+
+                  });
+
+                  Navigator.pushNamed(context, PaymentDoneDesign.route,arguments:amount);
+                }*/
                   if (formKey.currentState!.validate()) {
-                    Navigator.pushNamed(context, PaymentDoneDesign.route,
-                        arguments: amount);
+                    apiService
+                        .addPaymentDetails(paymentPageRequired, amount)
+                        .then((value) {
+                      if (value.error == 0) {
+                        int? paymentId = value.data?.insertId;
+                        if (paymentId != null) {
+                          apiService
+                              .addAppointment(paymentPageRequired, paymentId)
+                              .then((value) {
+                            if (value.error != 0) {
+                              showSnackbar(context, "Something went wrong..");
+                            }
+                          });
+                        } else {
+                          showSnackbar(context, "Something went wrong..");
+                        }
+                      } else {
+                        showSnackbar(context, "Something went wrong..");
+                      }
+                    });
                   }
                 },
                 child: const Text('Submit Payment'),

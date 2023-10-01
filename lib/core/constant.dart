@@ -1,11 +1,14 @@
 const host = "http://192.168.12.108:8000";
 
 const userEp = "$host/users";
-const appoinments = "$host/appoinments";
 const loginUserEp = "$userEp/login";
 
 const doctorEp = "$host/doctors";
 const loginDoctorEp = "$doctorEp/login";
+
+const paymentEp = "$host/payments";
+
+const appoEp = "$host/appoinments";
 
 const DOCTOR_ID_PREFERENCE = "doctor_id";
 const USER_ID_PREFERENCE = "user_id";

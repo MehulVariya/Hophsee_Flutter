@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/data/module/payment_page_required.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/constant.dart';
@@ -83,8 +84,12 @@ class _AppointmentDesignState extends State<AppointmentBookScreen> {
                           ? () {
                               int? doctorId = widget.doctor.doctorId;
                               String? appoDt = selectedDate;
-                            //  String? appoDt = selectedDate;
-                              Navigator.pushNamed(context, PaymentDesign.route);
+                              String? appoTime = selectedTime;
+                              Navigator.pushNamed(context, PaymentDesign.route,
+                                  arguments: PaymentPageRequired(
+                                      doctorId: doctorId,
+                                      appoDt: appoDt,
+                                      appoTime: appoTime));
                             }
                           : null,
                       // Disable the button if date or time is not selected
