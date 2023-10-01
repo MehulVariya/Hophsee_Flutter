@@ -12,6 +12,7 @@ import 'forget_password_bottom_sheet.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
   static const route = '/login';
 
   @override
@@ -101,17 +102,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       var password = passwordController.text;
                       if (isDoctor) {
                         apiService.loginDoctor(email, password).then((value) {
+                          print("object ${value.toString()}");
                           if (value.error == 0) {
                             if (value.data?.doctorId != null) {
                               var doctor = value.data;
                               Preference.putDataUserDetails(doctor?.doctorName,
                                   doctor?.imageUrl, doctor?.doctorId,
                                   isDoctor: true);
-                              Navigator.pushAndRemoveUntil(
+
+                              Navigator.pushNamedAndRemoveUntil(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => DoctorHomeScreen(),
-                                ),
+                                DoctorHomeScreen.route,
                                 (route) => false,
                               );
                             } else {
@@ -176,12 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
               CommonLabelWithTap(
                 text: 'Sign Up',
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RegisterScreen(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, RegisterScreen.route);
                 },
               ),
             ]),

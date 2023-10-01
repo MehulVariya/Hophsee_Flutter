@@ -70,7 +70,6 @@ class DoctorCard extends StatelessWidget {
                   description,
                   style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 16),

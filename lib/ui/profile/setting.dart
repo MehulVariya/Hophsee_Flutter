@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../core/utils.dart';
+
 class SettingsPage extends StatelessWidget {
+  static const route = '/setting_screen';
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        //title: Text('Help Me'),
-
-        backgroundColor: Colors.white,
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          top: 20,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              backArrow(context),
               Text(
                 'General Settings',
                 style: TextStyle(

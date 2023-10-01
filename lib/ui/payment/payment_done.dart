@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../dashboard/user_home_screen.dart';
 
-
 class PaymentDoneDesign extends StatefulWidget {
   const PaymentDoneDesign({super.key});
+  static const route = '/payment_done_screen';
 
   @override
   State<PaymentDoneDesign> createState() => _PaymentDoneDesignState();
@@ -26,12 +26,8 @@ class _PaymentDoneDesignState extends State<PaymentDoneDesign> {
                 alignment: Alignment.topLeft, // Align to the top-left corner
                 child: IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const UserHomeScreen(),
-                      ),
-                    );
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, UserHomeScreen.route, (route) => false);
                   },
                   icon: const Icon(
                     Icons.arrow_back,

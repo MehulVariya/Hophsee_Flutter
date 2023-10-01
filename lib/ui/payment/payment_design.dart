@@ -7,6 +7,7 @@ class PaymentDesign extends StatefulWidget {
   const PaymentDesign({
     super.key,
   });
+  static const route = '/payment_screen';
 
   @override
   State<PaymentDesign> createState() => _PaymentDesignState();
@@ -239,12 +240,7 @@ class PaymentBottomSheet extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PaymentDoneDesign(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, PaymentDoneDesign.route);
                   }
                 },
                 child: const Text('Submit Payment'),

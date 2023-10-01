@@ -1,17 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hophseeflutter/ui/profile/help_design.dart';
 import 'package:hophseeflutter/ui/profile/setting.dart';
-import 'package:hophseeflutter/ui/profile/show_profile.dart';
+import 'package:hophseeflutter/ui/profile/edit_profile_screen.dart';
 
 import '../../core/constant.dart';
 import '../../core/share_preference.dart';
+import '../../core/utils.dart';
 import '../home/login_screen.dart';
 
 class ProfileDesign extends StatefulWidget {
-  const ProfileDesign({super.key});
+  const ProfileDesign({super.key, this.isNotBackArrow = true});
+
   static const route = '/profile_screen';
+  final bool isNotBackArrow;
 
   @override
   State<ProfileDesign> createState() => _ProfileDesignState();
@@ -27,173 +31,161 @@ class _ProfileDesignState extends State<ProfileDesign> {
 
   // Getter to get the stream associated with this controller.
   Stream<String> get image_stream => _image_controller.stream;
+
   @override
   Widget build(BuildContext context) {
     changeData();
-    return Scaffold(
-      body: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           child: Container(
-        padding: const EdgeInsets.only(top: 100),
-        child: Container(
-          child: Column(
-            children: [
-              StreamBuilder<String>(
-                stream: image_stream, // Access the custom stream
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return SizedBox(
-                      width: 130,
-                      height: 130,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.blue, // Border color
-                            width: 3.0, // Border width
-                          ),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: Image.network(snapshot.data.toString()),
-                        ),
-                      ),
-                    );
-                  } else {
-                    return const SizedBox(
-                      child: Text(
-                        "Image",
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                    );
-                  }
-                },
-              ),
-
-              const SizedBox(
-                height: 20,
-              ),
-              StreamBuilder<String>(
-                stream: stream, // Access the custom stream
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return SizedBox(
-                      child: Text(
-                        snapshot.data.toString(),
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                    );
-                  } else {
-                    return const SizedBox(
-                      child: Text(
-                        "Name",
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: 150,
-                height: 40,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ShowProfileDesign(),
-                        ),
-                        (route) => false);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.yellow,
-                      side: BorderSide.none,
-                      shape: const StadiumBorder()),
-                  child: const Text(
-                    'Edit Profile',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(),
-
-              const SizedBox(
-                height: 20,
-              ),
-              //menu
-              Column(
+            child: Container(
+              child: Column(
                 children: [
-                  ProfileMenu(
-                    Title: "Personal Detail",
-                    icon: Icons.perm_identity,
-                    onPress: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ShowProfileDesign(),
+                  if (widget.isNotBackArrow) backArrow(context),
+                  if (!widget.isNotBackArrow)
+                    Container(
+                      height: 40.h,
+                      width: double.infinity,
+                      padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                    ),
+                  StreamBuilder<String>(
+                    stream: image_stream, // Access the custom stream
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return SizedBox(
+                          width: 130,
+                          height: 130,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.blue, // Border color
+                                width: 3.0, // Border width
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Image.network(snapshot.data.toString()),
+                            ),
                           ),
-                          (route) => false);
+                        );
+                      } else {
+                        return const SizedBox(
+                          child: Text(
+                            "Image",
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          ),
+                        );
+                      }
                     },
                   ),
-                  // ProfileMenu(
-                  //   Title: "medical Information",
-                  //   icon: Icons.medical_information,
-                  //   onPress: () {},
-                  // ),
+
                   const SizedBox(
                     height: 20,
                   ),
+                  StreamBuilder<String>(
+                    stream: stream, // Access the custom stream
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return SizedBox(
+                          child: Text(
+                            snapshot.data.toString(),
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox(
+                          child: Text(
+                            "Name",
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  /* SizedBox(
+                    width: 150,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, EditProfileScreen.route);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.yellow,
+                          side: BorderSide.none,
+                          shape: const StadiumBorder()),
+                      child: const Text(
+                        'Edit Profile',
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),*/
                   const Divider(),
+
                   const SizedBox(
                     height: 20,
                   ),
-                  ProfileMenu(
-                    Title: "settings",
-                    icon: Icons.settings,
-                    onPress: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SettingsPage(),
-                          ));
-                    },
-                  ),
-                  ProfileMenu(
-                    Title: "Help",
-                    icon: Icons.help_outline_sharp,
-                    onPress: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HelpMePage(),
-                          ));
-                    },
-                  ),
-                  ProfileMenu(
-                    Title: "Logout",
-                    icon: Icons.logout,
-                    endIcon: false,
-                    onPress: () {
-                      Preference.clearData();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                          (route) => false);
-                    },
+                  //menu
+                  Column(
+                    children: [
+                      ProfileMenu(
+                        Title: "Personal Detail",
+                        icon: Icons.perm_identity,
+                        onPress: () {
+                          Navigator.pushNamed(context, EditProfileScreen.route);
+                        },
+                      ),
+                      // ProfileMenu(
+                      //   Title: "medical Information",
+                      //   icon: Icons.medical_information,
+                      //   onPress: () {},
+                      // ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Divider(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ProfileMenu(
+                        Title: "settings",
+                        icon: Icons.settings,
+                        onPress: () {
+                          Navigator.pushNamed(context, SettingsPage.route);
+                        },
+                      ),
+                      ProfileMenu(
+                        Title: "Help",
+                        icon: Icons.help_outline_sharp,
+                        onPress: () {
+                          Navigator.pushNamed(context, HelpMePage.route);
+                        },
+                      ),
+                      ProfileMenu(
+                        Title: "Logout",
+                        icon: Icons.logout,
+                        endIcon: false,
+                        onPress: () {
+                          Preference.clearData();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, LoginScreen.route, (route) => false);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
-      )),
+      ),
     );
   }
 

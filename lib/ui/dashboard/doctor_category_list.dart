@@ -24,14 +24,8 @@ class DoctorCategoryList extends StatelessWidget {
                     (e) => TextButton(
                       onPressed: () {
                         apiService.getDoctorList().then((value) {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  DoctorListScreen(doctorList: value),
-                            ),
-                            (route) => false,
-                          );
+                          Navigator.pushNamed(context, DoctorListScreen.route,
+                              arguments: value);
                         }, onError: (error) {
                           print(error);
                         });

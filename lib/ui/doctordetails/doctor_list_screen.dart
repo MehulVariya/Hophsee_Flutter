@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/core/utils.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:hophseeflutter/data/module/doctor_model.dart';
 import 'package:hophseeflutter/ui/dashboard/doctors_list_view.dart';
@@ -12,43 +13,56 @@ import '../profile/profile_design.dart';
 
 class DoctorListScreen extends StatefulWidget {
   DoctorList? doctorList;
+  bool isBack;
   static const route = '/doctor_list_screen';
-  DoctorListScreen({this.doctorList, super.key});
+
+  DoctorListScreen({this.doctorList, this.isBack = true, super.key});
 
   @override
   State<DoctorListScreen> createState() => _DoctorListScreenState();
 }
 
 class _DoctorListScreenState extends State<DoctorListScreen> {
-  @override
-  void initState() {
-    super.initState();
-    if (widget.doctorList == null) {
-      doctorList();
-    }
-    print("Doctor List All Doctor : ${widget.doctorList.toString()}");
-  }
+  final StreamController<DoctorList?> _controller =
+      StreamController<DoctorList?>();
 
-  void doctorList() async {
-    widget.doctorList = await ApiServiceImpl(Dio()).getDoctorList();
+  // Getter to get the stream associated with this controller.
+  Stream<DoctorList?> get stream => _controller.stream;
+
+  void doctorList(BuildContext context) async {
+    if (widget.doctorList == null) {
+      widget.doctorList = await ApiServiceImpl(Dio()).getDoctorList();
+    }
+    print("DoctorList : ${widget.doctorList}");
+    _controller.sink.add(widget.doctorList);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 50),
-        child: Column(
+    doctorList(context);
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
           children: [
-            const CustomAppBar(),
+            CustomAppBar(
+              backBtn: widget.isBack,
+            ),
             const SizedBox(
               height: 10,
             ),
-            Expanded(
-              child: DoctorsListView(
-                data: widget.doctorList?.data ?? [],
-              ),
-            )
+            StreamBuilder<DoctorList?>(
+                stream: stream, // Access the custom stream
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Expanded(
+                      child: DoctorsListView(
+                        data: (snapshot.data)?.data ?? [],
+                      ),
+                    );
+                  } else {
+                    return const Center(child: Text("Please wait..."));
+                  }
+                }),
           ],
         ),
       ),

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class ShowProfileDesign extends StatefulWidget {
+import '../../core/utils.dart';
+
+class EditProfileScreen extends StatefulWidget {
+  static const route = '/edit_profile_screen';
+
   @override
-  _ShowProfileDesignState createState() => _ShowProfileDesignState();
+  _EditProfileScreenState createState() => _EditProfileScreenState();
 }
 
-class _ShowProfileDesignState extends State<ShowProfileDesign> {
+class _EditProfileScreenState extends State<EditProfileScreen> {
   String name = '';
   String lastName = '';
   String mobileNumber = '';
@@ -42,68 +46,66 @@ class _ShowProfileDesignState extends State<ShowProfileDesign> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        //title: Text('Help Me'),
-        backgroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            CircleAvatar(
-              radius: 60.0,
-              backgroundImage: AssetImage(profilePhotoUrl),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Add logic to edit profile photo here
-              },
-              icon: Icon(Icons.edit),
-              label: Text('Edit Photo'),
-            ),
-            _buildEditableCard(
-              context,
-              'Name',
-              name,
-              (newValue) => setState(() => name = newValue),
-            ),
-            _buildEditableCard(
-              context,
-              'Last Name',
-              lastName,
-              (newValue) => setState(() => lastName = newValue),
-            ),
-            _buildEditableCard(
-              context,
-              'Mobile Number',
-              mobileNumber,
-              (newValue) => setState(() => mobileNumber = newValue),
-            ),
-            _buildEditableCard(
-              context,
-              'Email Address',
-              emailAddress,
-              (newValue) => setState(() => emailAddress = newValue),
-            ),
-            _buildEditableCard(
-              context,
-              'Gender',
-              gender,
-              (newValue) => setState(() => gender = newValue),
-              isGenderField: true,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _showSaveAllDialog(context);
-              },
-              child: Text('Save All'),
-            ),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(left:16.0,right:16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              backArrow(context),
+              SizedBox(height: 20),
+              CircleAvatar(
+                radius: 60.0,
+                backgroundImage: AssetImage(profilePhotoUrl),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Add logic to edit profile photo here
+                },
+                icon: Icon(Icons.edit),
+                label: Text('Edit Photo'),
+              ),
+              _buildEditableCard(
+                context,
+                'Name',
+                name,
+                (newValue) => setState(() => name = newValue),
+              ),
+              _buildEditableCard(
+                context,
+                'Last Name',
+                lastName,
+                (newValue) => setState(() => lastName = newValue),
+              ),
+              _buildEditableCard(
+                context,
+                'Mobile Number',
+                mobileNumber,
+                (newValue) => setState(() => mobileNumber = newValue),
+              ),
+              _buildEditableCard(
+                context,
+                'Email Address',
+                emailAddress,
+                (newValue) => setState(() => emailAddress = newValue),
+              ),
+              _buildEditableCard(
+                context,
+                'Gender',
+                gender,
+                (newValue) => setState(() => gender = newValue),
+                isGenderField: true,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _showSaveAllDialog(context);
+                },
+                child: Text('Save All'),
+              ),
+            ],
+          ),
         ),
       ),
     );

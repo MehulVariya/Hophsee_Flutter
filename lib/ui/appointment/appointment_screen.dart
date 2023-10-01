@@ -10,6 +10,7 @@ import '../profile/profile_design.dart';
 
 class AppointmentScreen extends StatefulWidget {
   final Doctor doctor;
+  static const route = '/appointment_screen';
 
   const AppointmentScreen({super.key, required this.doctor});
 
@@ -34,81 +35,73 @@ class _AppointmentDesignState extends State<AppointmentScreen> {
         // Wrap the Scaffold with a Stack
         children: [
           SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 50),
-              child: Column(
-                children: [
-                  const CustomAppBar(),
-                  const Divider(
-                    height: 2,
-                  ),
-                  const SizedBox(height: 10),
-                  DoctorCard(
-                      name: widget.doctor.doctorName ?? "",
-                      description: widget.doctor.briefDesc ?? "",
-                      imagePath: widget.doctor.imageUrl ?? "",
-                      isOpenBookBtn: false,
-                      onPressed: () {}),
-                  const SizedBox(height: 10),
-                  const Divider(
-                    height: 2,
-                  ),
-                  const SizedBox(height: 10),
-                  DateSelector(
-                    onDateSelected: (date) {
-                      setState(() {
-                        selectedDate = date;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  const Divider(
-                    height: 2,
-                  ),
-                  const SizedBox(height: 10),
-                  TimeSelector(
-                    onTimeSelected: (time) {
-                      setState(() {
-                        selectedTime = time;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  const Divider(
-                    height: 2,
-                  ),
-                  const SizedBox(height: 10),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    width: 150,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: isButtonEnabled
-                          ? () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const PaymentDesign(),
-                                ),
-                              );
-                            }
-                          : null,
-                      // Disable the button if date or time is not selected
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isButtonEnabled
-                            ? Colors.blue
-                            : Colors.grey, // Change button color when disabled
-                        side: BorderSide.none,
-                        shape: const StadiumBorder(),
-                      ),
-                      child: const Text(
-                        'Book Now',
-                        style: TextStyle(color: Colors.black, fontSize: 18),
-                      ),
+            child: Column(
+              children: [
+                const CustomAppBar(),
+                const Divider(
+                  height: 2,
+                ),
+                const SizedBox(height: 10),
+                DoctorCard(
+                    name: widget.doctor.doctorName ?? "",
+                    description: widget.doctor.briefDesc ?? "",
+                    imagePath: widget.doctor.imageUrl ?? "",
+                    isOpenBookBtn: false,
+                    onPressed: () {}),
+                const SizedBox(height: 10),
+                const Divider(
+                  height: 2,
+                ),
+                const SizedBox(height: 10),
+                DateSelector(
+                  onDateSelected: (date) {
+                    setState(() {
+                      selectedDate = date;
+                    });
+                  },
+                ),
+                const SizedBox(height: 10),
+                const Divider(
+                  height: 2,
+                ),
+                const SizedBox(height: 10),
+                TimeSelector(
+                  onTimeSelected: (time) {
+                    setState(() {
+                      selectedTime = time;
+                    });
+                  },
+                ),
+                const SizedBox(height: 10),
+                const Divider(
+                  height: 2,
+                ),
+                const SizedBox(height: 10),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: 150,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: isButtonEnabled
+                        ? () {
+                      Navigator.pushNamed(context, PaymentDesign.route);
+                          }
+                        : null,
+                    // Disable the button if date or time is not selected
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isButtonEnabled
+                          ? Colors.blue
+                          : Colors.grey, // Change button color when disabled
+                      side: BorderSide.none,
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Text(
+                      'Book Now',
+                      style: TextStyle(color: Colors.black, fontSize: 18),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

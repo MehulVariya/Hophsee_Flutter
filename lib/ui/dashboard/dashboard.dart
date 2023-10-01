@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hophseeflutter/core/utils.dart';
 import 'package:hophseeflutter/core/widget/common_label.dart';
 import 'package:hophseeflutter/core/widget/common_label_with_tap.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
+import 'package:hophseeflutter/data/module/doctor_model.dart';
 import 'package:hophseeflutter/ui/dashboard/custom_ad.dart';
 import 'package:hophseeflutter/ui/dashboard/doctor_category_list.dart';
 import 'package:hophseeflutter/ui/dashboard/doctors_list_view.dart';
@@ -21,6 +25,31 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   ApiServiceImpl apiService = ApiServiceImpl(Dio());
+  DoctorList? doctorList;
+  final StreamController<DoctorList?> _controller =
+      StreamController<DoctorList?>();
+
+  // Getter to get the stream associated with this controller.
+  Stream<DoctorList?> get stream => _controller.stream;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (doctorList == null) {
+      apiService.getDoctorList().then(
+        (value) {
+          doctorList = value;
+          _controller.sink.add(doctorList);
+        },
+        onError: (error) {
+          print(error);
+        },
+      );
+    } else {
+      _controller.sink.add(doctorList);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,35 +94,52 @@ class _MyHomeState extends State<MyHome> {
                 height: 10,
               ),
               const Divider(),
-              Padding(
-                padding: EdgeInsets.only(right: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const CommonLabel(displayText: "All Doctors"),
-                    CommonLabelWithTap(
-                        text: "SEE ALL",
-                        onTap: () {
-                          apiService.getDoctorList().then((value) {
-                            Navigator.pushNamed(context, DoctorListScreen.route,arguments: value);
-                          }, onError: (error) {
-                            print(error);
-                          });
-                        })
-                  ],
-                ),
+              StreamBuilder<DoctorList?>(
+                stream: stream, // Access the custom stream
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const CommonLabel(displayText: "All Doctors"),
+                              CommonLabelWithTap(
+                                text: "SEE ALL",
+                                onTap: () {
+                                  ScaffoldMessenger.of(context)
+                                      .clearSnackBars();
+                                  Navigator.pushNamed(
+                                      context, DoctorListScreen.route,
+                                      arguments: snapshot.data);
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          height: 170.h,
+                          child: DoctorsListView(
+                            data: snapshot.data?.data?.sublist(0, 3) ?? [],
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return const Center(
+                    child: Text("Please wait.."),
+                  );
+                },
               ),
-              SizedBox(
-                height: 15.h,
-              ),
-              Container(
-                width: double.infinity,
-                height: 300.h,
-                child: DoctorsListView(
-                  data: [],
-                ),
-              ),
+              SizedBox(height: 5.h,),
               const Divider(),
+
               const Align(
                   alignment: Alignment.centerLeft,
                   child: CommonLabel(displayText: "About Us")),
@@ -101,6 +147,7 @@ class _MyHomeState extends State<MyHome> {
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
                 child: AdvertisementCard(),
               ),
+              SizedBox(height: 10.h,)
               // Doctor list
               /*  Expanded(
                         child:

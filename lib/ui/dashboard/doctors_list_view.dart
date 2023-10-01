@@ -23,12 +23,7 @@ class DoctorsListView extends StatelessWidget {
           description: "${doctor.briefDesc}",
           imagePath: doctor.imageUrl ?? "", // Use custom image
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AppointmentScreen(doctor: doctor),
-              ),
-            );
+            Navigator.pushNamed(context, AppointmentScreen.route,arguments: doctor);
           },
         );
       },

@@ -16,6 +16,10 @@ class UserHomeScreen extends StatefulWidget {
 class _HomeState extends State<UserHomeScreen> {
   final items = const [
     Icon(
+      Icons.list_alt,
+      size: 30,
+    ),
+    Icon(
       Icons.home_outlined,
       size: 30,
     ),
@@ -25,16 +29,12 @@ class _HomeState extends State<UserHomeScreen> {
       size: 30,
     ),*/
     Icon(
-      Icons.list_alt,
-      size: 30,
-    ),
-    Icon(
       Icons.person_outline,
       size: 30,
     )
   ];
 
-  int index = 0;
+  int index = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +62,19 @@ class _HomeState extends State<UserHomeScreen> {
     Widget widget;
     switch (index) {
       case 0:
-        widget = const MyHome();
-        break; /*
+        widget = DoctorListScreen(
+          isBack: false,
+        );
+        break;
+      /*
       case 1:
         widget = const AppointmentScreen();
         break;*/
       case 1:
-        widget = DoctorListScreen();
+        widget = const MyHome();
         break;
       case 2:
-        widget = const ProfileDesign();
+        widget = const ProfileDesign(isNotBackArrow: false);
         break;
       default:
         widget = const MyHome();
