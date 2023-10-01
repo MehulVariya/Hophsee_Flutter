@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import '../dashboard/user_home_screen.dart';
 
 class PaymentDoneDesign extends StatefulWidget {
-  const PaymentDoneDesign({super.key});
+  const PaymentDoneDesign({super.key, required this.amount});
+
   static const route = '/payment_done_screen';
+  final int amount;
 
   @override
   State<PaymentDoneDesign> createState() => _PaymentDoneDesignState();
@@ -87,15 +89,15 @@ class _PaymentDoneDesignState extends State<PaymentDoneDesign> {
                                   left: MediaQuery.of(context).size.width *
                                       0.02, // Adjust left padding based on screen width
                                 ),
-                                child: const Row(
+                                child:  Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.currency_rupee_sharp,
                                       color: Colors.black,
                                     ),
                                     Text(
-                                      'Amount',
-                                      style: TextStyle(
+                                      widget.amount.toString(),
+                                      style: const TextStyle(
                                           color: Colors.black, fontSize: 18),
                                     ),
                                   ],

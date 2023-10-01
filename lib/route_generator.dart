@@ -42,7 +42,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const PaymentDesign());
 
       case PaymentDoneDesign.route:
-        return MaterialPageRoute(builder: (_) => const PaymentDoneDesign());
+        return MaterialPageRoute(builder: (_) => PaymentDoneDesign(amount: args as int,));
 
       case SettingsPage.route:
         return MaterialPageRoute(builder: (_) => SettingsPage());

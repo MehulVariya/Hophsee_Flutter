@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hophseeflutter/core/utils.dart';
+import 'package:hophseeflutter/ui/payment/payment_bottom_sheet.dart';
 import 'package:hophseeflutter/ui/payment/payment_done.dart';
 
 import '../appointment/appointment_book_screen.dart';
@@ -7,6 +10,7 @@ class PaymentDesign extends StatefulWidget {
   const PaymentDesign({
     super.key,
   });
+
   static const route = '/payment_screen';
 
   @override
@@ -18,32 +22,16 @@ class _PaymentDesignState extends State<PaymentDesign> {
   final TextEditingController _cardNumberController = TextEditingController();
   final TextEditingController _expiryDateController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.only(top: 80),
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.topLeft, // Align to the top-left corner
-                child: IconButton(
-                  onPressed: () {
-                    /*Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AppointmentScreen(),
-                      ),
-                    );*/
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
+              backArrow(context),
               Center(
                 child: Column(
                   children: [
@@ -78,15 +66,20 @@ class _PaymentDesignState extends State<PaymentDesign> {
                           }
                           return null;
                         },
-                        decoration: const InputDecoration(
-                          hintText: 'Amount',
-                          labelText: 'Amount',
-                          prefixIcon: Icon(
+                        controller: _amountController,
+                        decoration: InputDecoration(
+                          /*hintText: 'Amount',
+                          labelText: 'Amount',*/
+                          hintText: "500",
+                          hintStyle:
+                              TextStyle(color: Colors.black, fontSize: 18.sp),
+                          enabled: false,
+                          prefixIcon: const Icon(
                             Icons.currency_rupee_sharp,
                             color: Colors.green,
                           ),
-                          errorStyle: TextStyle(fontSize: 14.0),
-                          border: OutlineInputBorder(
+                          errorStyle: const TextStyle(fontSize: 14.0),
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.red),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(9.0)),
@@ -102,16 +95,19 @@ class _PaymentDesignState extends State<PaymentDesign> {
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return PaymentBottomSheet(
-                                  formKey: _formKey,
-                                  cardNumberController: _cardNumberController,
-                                  expiryDateController: _expiryDateController,
-                                  cvvController: _cvvController);
-                            },
-                          );
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return PaymentBottomSheet(
+                                    formKey: _formKey,
+                                    cardNumberController: _cardNumberController,
+                                    expiryDateController: _expiryDateController,
+                                    cvvController: _cvvController,
+                                    amount:
+                                        500 /*int.parse(_amountController.text)*/);
+                              },
+                            );
+                          
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
@@ -126,124 +122,6 @@ class _PaymentDesignState extends State<PaymentDesign> {
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PaymentBottomSheet extends StatelessWidget {
-  final GlobalKey<FormState> formKey;
-  final TextEditingController cardNumberController;
-  final TextEditingController expiryDateController;
-  final TextEditingController cvvController;
-
-  const PaymentBottomSheet({
-    super.key,
-    required this.formKey,
-    required this.cardNumberController,
-    required this.expiryDateController,
-    required this.cvvController,
-  });
-
-  bool isCreditCardNumberValid(String input) {
-    // Define a regex pattern for a valid credit card number.
-    // This example assumes a 16-digit credit card number.
-    final RegExp regex = RegExp(r'^\d{16}$');
-
-    // Use the regex pattern to check if the input matches.
-    return regex.hasMatch(input);
-  }
-
-  bool isExpiryDateValid(String input) {
-    // Define a regex pattern for a valid expiry date in MM/YY format.
-    final RegExp regex = RegExp(r'^(0[1-9]|1[0-2])\/\d{2}$');
-
-    // Use the regex pattern to check if the input matches.
-    return regex.hasMatch(input);
-  }
-
-  bool isCVVValid(String input) {
-    // Define a regex pattern for a valid CVV number (3 digits).
-    final RegExp regex = RegExp(r'^\d{3}$');
-
-    // Use the regex pattern to check if the input matches.
-    return regex.hasMatch(input);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(40),
-        child: Form(
-          key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Payment Portal',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: cardNumberController,
-                decoration: const InputDecoration(
-                  labelText: 'Card Number',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the card number';
-                  }
-                  if (!isCreditCardNumberValid(value)) {
-                    return 'Invalid credit card number';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: expiryDateController,
-                decoration: const InputDecoration(
-                  labelText: 'Expiry Date (MM/YY)',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the expiry date';
-                  }
-                  if (!isExpiryDateValid(value)) {
-                    return 'Invalid expiry date format';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: cvvController,
-                decoration: const InputDecoration(
-                  labelText: 'CVV',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the CVV';
-                  }
-                  if (!isCVVValid(value)) {
-                    return 'Invalid CVV number (3 digits required)';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    Navigator.pushNamed(context, PaymentDoneDesign.route);
-                  }
-                },
-                child: const Text('Submit Payment'),
               ),
             ],
           ),
