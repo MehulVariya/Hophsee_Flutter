@@ -66,14 +66,6 @@ class _MyHomeState extends State<MyHome> {
               const Divider(),
               const Align(
                   alignment: Alignment.centerLeft,
-                  child: CommonLabel(displayText: "About Us")),
-              Padding(
-                padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: AdvertisementCard(),
-              ),
-              const Divider(),
-              const Align(
-                  alignment: Alignment.centerLeft,
                   child: CommonLabel(displayText: "Categories")),
               const SizedBox(
                 height: 10,
@@ -109,12 +101,26 @@ class _MyHomeState extends State<MyHome> {
                 ),
               ),
               SizedBox(
-                height: 500.h,
+                height: 15.h,
+              ),
+              Container(
+                width: double.infinity,
+                height: 300.h,
+                child: DoctorsListView(
+                  data: [],
+                ),
+              ),
+              const Divider(),
+              const Align(
+                  alignment: Alignment.centerLeft,
+                  child: CommonLabel(displayText: "About Us")),
+              Padding(
+                padding: const EdgeInsets.only(top: 5, bottom: 5),
+                child: AdvertisementCard(),
               ),
               // Doctor list
               /*  Expanded(
-                        child: DoctorsListView(
-                          data: [],
+                        child:
                         ),
                       ),*/
             ],

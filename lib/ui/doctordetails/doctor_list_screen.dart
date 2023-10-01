@@ -36,43 +36,29 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 50),
-          child: Column(
-            children: [
-              CustomAppBar(
-                  icon: Icons.cabin_outlined,
-                  onPress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ProfileDesign(),
-                      ),
-                    );
-                  }),
-              const Divider(),
-              // Text(
-              //   'Here Is The list of all the doctors\nwho are providing services here.',
-              //   style: TextStyle(
-              //     fontSize: 19,
-              //     color: Colors.blue,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
-              // const SizedBox(height: 16),
-              //const Divider(),
-              const SizedBox(
-                height: 10,
-              ),
-              DoctorsListView(
+      body: Padding(
+        padding: const EdgeInsets.only(top: 50),
+        child: Column(
+          children: [
+            CustomAppBar(
+                icon: Icons.cabin_outlined,
+                onPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfileDesign(),
+                    ),
+                  );
+                }),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: DoctorsListView(
                 data: widget.doctorList?.data ?? [],
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

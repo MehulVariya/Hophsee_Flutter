@@ -32,11 +32,11 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light, // Set the default theme to light
         // Define other theme properties like colors, text styles, etc.
       ),
-      darkTheme: ThemeData(
+      /* darkTheme: ThemeData(
         primarySwatch: Colors.blue,
         brightness: Brightness.dark, // Set the dark theme
         // Define dark theme properties.
-      ),
+      ),*/
       initialRoute: 'HomeScreen',
       home: const SafeArea(child: SplashScreen()),
     );
