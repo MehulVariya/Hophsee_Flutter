@@ -122,7 +122,7 @@ class PaymentBottomSheet extends StatelessWidget {
 
                   });
 
-                  Navigator.pushNamed(context, PaymentDoneDesign.route,arguments:amount);
+
                 }*/
                   if (formKey.currentState!.validate()) {
                     apiService
@@ -136,6 +136,10 @@ class PaymentBottomSheet extends StatelessWidget {
                               .then((value) {
                             if (value.error != 0) {
                               showSnackbar(context, "Something went wrong..");
+                            } else {
+                              Navigator.pushNamed(
+                                  context, PaymentDoneDesign.route,
+                                  arguments: amount);
                             }
                           });
                         } else {

@@ -8,6 +8,7 @@ import 'package:hophseeflutter/data/module/payment_model.dart';
 import 'package:hophseeflutter/data/module/payment_page_required.dart';
 
 import '../../core/constant.dart';
+import '../../core/utils.dart';
 import '../module/user_login_model.dart';
 import '../module/response_query.dart';
 import '../module/user_model.dart';
@@ -172,9 +173,12 @@ class ApiServiceImpl extends ApiService {
       data["user_id"] = userId;
       data["doctor_id"] = paymentPageRequired.doctorId;
       data["payment_id"] = paymentId;
-      data["appo_dt"] = paymentPageRequired.appoDt;
+      data["appo_dt"] = convertToyyyymmdd(paymentPageRequired.appoDt ?? "");
       data["appo_time"] = paymentPageRequired.appoTime;
       data["is_approve"] = true;
+
+      print("1>>>> appo_dt ${paymentPageRequired.appoDt}");
+      print("1>>>> appo_time ${paymentPageRequired.appoTime}");
 
       final response = await dio.post(
         appoEp,

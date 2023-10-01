@@ -75,7 +75,7 @@ Future<void> delay(int second) async {
   // Your code to be executed after the delay goes here
 }
 
-Widget backArrow(BuildContext context){
+Widget backArrow(BuildContext context) {
   return Container(
     height: 40.h,
     width: double.infinity,
@@ -90,4 +90,26 @@ Widget backArrow(BuildContext context){
       ),
     ),
   );
+}
+
+String convertToyyyymmdd(String inputDate) {
+  // Split the input date string into day, month, and year parts
+  List<String> dateParts = inputDate.split('/');
+
+  if (dateParts.length == 3) {
+    int day = int.parse(dateParts[0]);
+    int month = int.parse(dateParts[1]);
+    int year = int.parse(dateParts[2]);
+
+    // Create a DateTime object with the parsed values
+    DateTime dateTime = DateTime(year, month, day);
+
+    // Format the DateTime as a string in yyyy/mm/dd format
+    String formattedDate =
+        "${dateTime.year}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.day.toString().padLeft(2, '0')}";
+
+    print(formattedDate);
+    return formattedDate;
+  }
+  return "";
 }
