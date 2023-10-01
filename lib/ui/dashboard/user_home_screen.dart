@@ -5,14 +5,15 @@ import '../doctordetails/doctor_list_screen.dart';
 import '../profile/profile_design.dart';
 import 'dashboard.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class UserHomeScreen extends StatefulWidget {
+  const UserHomeScreen({Key? key}) : super(key: key);
+  static const route = '/user_screen';
 
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<HomeScreen> {
+class _HomeState extends State<UserHomeScreen> {
   final items = const [
     Icon(
       Icons.home_outlined,

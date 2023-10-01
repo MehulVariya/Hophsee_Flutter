@@ -2,21 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hophseeflutter/ui/profile/profile_design.dart';
 
 import '../share_preference.dart';
 
 class CustomAppBar extends StatefulWidget {
-  CustomAppBar({
+  const CustomAppBar({
     Key? key,
-    required this.icon,
-    required this.onPress,
-    this.imagePath = "",
     this.backBtn = true,
   }) : super(key: key);
-  final IconData icon;
-  final VoidCallback onPress;
   final bool backBtn;
-  final String imagePath;
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -32,13 +27,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   // Getter to get the stream associated with this controller.
   Stream<String> get image_stream => _image_controller.stream;
+
   @override
   Widget build(BuildContext context) {
     changeData();
     return Container(
       height: 40.h,
       width: double.infinity,
-      color: Colors.greenAccent,
       padding: EdgeInsets.only(left: 10.w, right: 10.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,7 +74,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return InkWell(
-                  onTap: widget.onPress,
+                  onTap: () {
+                    Navigator.pushNamed(context, ProfileDesign.route);
+                  },
                   child: Container(
                     width: 40.w,
                     height: 40.w,

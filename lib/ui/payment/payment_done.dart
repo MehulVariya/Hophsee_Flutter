@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../dashboard/HomeScreen.dart';
+import '../dashboard/user_home_screen.dart';
+
 
 class PaymentDoneDesign extends StatefulWidget {
   const PaymentDoneDesign({super.key});
@@ -28,7 +29,7 @@ class _PaymentDoneDesignState extends State<PaymentDoneDesign> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
+                        builder: (context) => const UserHomeScreen(),
                       ),
                     );
                   },

@@ -11,11 +11,11 @@ import '../../core/widget/custom_text_field.dart';
 import '../../core/widget/date_picker.dart';
 import '../../data/datasource/api_services.dart';
 import '../../data/module/user_model.dart';
-import '../dashboard/HomeScreen.dart';
 import 'gender_drop_down.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key});
+  static const route = '/register_screen';
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();

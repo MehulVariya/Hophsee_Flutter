@@ -3,7 +3,8 @@ import 'package:hophseeflutter/core/share_preference.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:hophseeflutter/data/module/categories.dart';
 
-import '../ui/dashboard/HomeScreen.dart';
+import '../ui/dashboard/user_home_screen.dart';
+
 
 void showSnackbar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).clearSnackBars();
@@ -22,7 +23,7 @@ void loginUser(ApiServiceImpl apiService, BuildContext context, String email,
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => const UserHomeScreen(),
           ),
           (route) => false,
         );
@@ -33,7 +34,8 @@ void loginUser(ApiServiceImpl apiService, BuildContext context, String email,
       showSnackbar(context, "invalid email or password");
     }
   }, onError: (error) {
-    showSnackbar(context, error.toString());
+    showSnackbar(
+        context, "Something went wrong try again");
   });
 }
 
@@ -68,4 +70,9 @@ void hideKeyboard(BuildContext context) {
   if (!currentFocus.hasPrimaryFocus) {
     currentFocus.unfocus();
   }
+}
+
+Future<void> delay(int second) async {
+  await Future.delayed(Duration(seconds: second));
+  // Your code to be executed after the delay goes here
 }

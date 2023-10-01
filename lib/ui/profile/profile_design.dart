@@ -11,6 +11,7 @@ import '../home/login_screen.dart';
 
 class ProfileDesign extends StatefulWidget {
   const ProfileDesign({super.key});
+  static const route = '/profile_screen';
 
   @override
   State<ProfileDesign> createState() => _ProfileDesignState();

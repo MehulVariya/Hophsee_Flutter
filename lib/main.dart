@@ -4,10 +4,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hophseeflutter/ui/dashboard/HomeScreen.dart';
-import 'package:hophseeflutter/ui/dashboard/dashboard.dart';
-import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
-import 'package:hophseeflutter/ui/home/login_screen.dart';
+import 'package:hophseeflutter/route_generator.dart';
 import 'package:hophseeflutter/ui/splash/splash_screen.dart';
 
 void main() {
@@ -37,8 +34,8 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark, // Set the dark theme
         // Define dark theme properties.
       ),*/
-      initialRoute: 'HomeScreen',
-      home: const SafeArea(child: SplashScreen()),
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

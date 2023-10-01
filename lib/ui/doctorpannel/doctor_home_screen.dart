@@ -3,12 +3,14 @@ import '../../core/widget/custome_app_bar.dart';
 import '../dashboard/dashboard.dart';
 import '../profile/profile_design.dart';
 
-class DoctorHome extends StatefulWidget {
+class DoctorHomeScreen extends StatefulWidget {
+  static const route = '/doctor_screen';
+
   @override
-  _DoctorHomeState createState() => _DoctorHomeState();
+  _DoctorHomeScreenState createState() => _DoctorHomeScreenState();
 }
 
-class _DoctorHomeState extends State<DoctorHome> {
+class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   List<Patient> patients = [
     Patient(
         name: 'Abhay Ambaliya',
@@ -35,18 +37,7 @@ class _DoctorHomeState extends State<DoctorHome> {
         padding: const EdgeInsets.only(top: 40),
         child: Column(
           children: [
-            CustomAppBar(
-              imagePath: "",
-              icon: Icons.perm_identity,
-              onPress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProfileDesign(),
-                  ),
-                );
-              },
-            ),
+            const CustomAppBar(),
             Divider(),
             Expanded(
               child: Padding(

@@ -38,16 +38,7 @@ class _AppointmentDesignState extends State<AppointmentScreen> {
               padding: const EdgeInsets.only(top: 50),
               child: Column(
                 children: [
-                  CustomAppBar(
-                      icon: Icons.cabin_outlined,
-                      onPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProfileDesign(),
-                          ),
-                        );
-                      }),
+                  const CustomAppBar(),
                   const Divider(
                     height: 2,
                   ),

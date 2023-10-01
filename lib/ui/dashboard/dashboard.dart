@@ -29,18 +29,8 @@ class _MyHomeState extends State<MyHome> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              CustomAppBar(
-                icon: Icons.perm_identity,
+              const CustomAppBar(
                 backBtn: false,
-                onPress: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfileDesign(),
-                    ),
-                    (route) => false,
-                  );
-                },
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
@@ -85,14 +75,7 @@ class _MyHomeState extends State<MyHome> {
                         text: "SEE ALL",
                         onTap: () {
                           apiService.getDoctorList().then((value) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    DoctorListScreen(doctorList: value),
-                              ),
-                              (route) => false,
-                            );
+                            Navigator.pushNamed(context, DoctorListScreen.route,arguments: value);
                           }, onError: (error) {
                             print(error);
                           });

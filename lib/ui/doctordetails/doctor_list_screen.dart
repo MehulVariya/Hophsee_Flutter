@@ -12,7 +12,7 @@ import '../profile/profile_design.dart';
 
 class DoctorListScreen extends StatefulWidget {
   DoctorList? doctorList;
-
+  static const route = '/doctor_list_screen';
   DoctorListScreen({this.doctorList, super.key});
 
   @override
@@ -40,16 +40,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
         padding: const EdgeInsets.only(top: 50),
         child: Column(
           children: [
-            CustomAppBar(
-                icon: Icons.cabin_outlined,
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfileDesign(),
-                    ),
-                  );
-                }),
+            const CustomAppBar(),
             const SizedBox(
               height: 10,
             ),

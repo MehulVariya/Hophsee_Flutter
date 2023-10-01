@@ -8,11 +8,11 @@ import '../../core/utils.dart';
 import '../../core/widget/custom_text_field.dart';
 import '../../core/widget/common_label_with_tap.dart';
 import '../../data/datasource/api_services.dart';
-import '../dashboard/HomeScreen.dart';
 import 'forget_password_bottom_sheet.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+  static const route = '/login';
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => DoctorHome(),
+                                  builder: (context) => DoctorHomeScreen(),
                                 ),
                                 (route) => false,
                               );
@@ -122,7 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             showSnackbar(context, "invalid email or password");
                           }
                         }, onError: (error) {
-                          print(error);
+                          showSnackbar(
+                              context, "Something went wrong try again");
                         });
                       } else {
                         loginUser(apiService, context, email, password);
