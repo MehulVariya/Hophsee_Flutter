@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/ui/payment/payment_done.dart';
 
-import '../appointment/appointment_screen.dart';
+import '../appointment/appointment_book_screen.dart';
 
 class PaymentDesign extends StatefulWidget {
   const PaymentDesign({

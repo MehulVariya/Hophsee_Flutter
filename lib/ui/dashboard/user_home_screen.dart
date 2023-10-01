@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import '../appointment/appointment_screen.dart';
+import '../appointment/appointment_book_screen.dart';
 import '../doctordetails/doctor_list_screen.dart';
 import '../profile/profile_design.dart';
 import 'dashboard.dart';

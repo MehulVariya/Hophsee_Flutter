@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/constant.dart';
 import '../../data/module/doctor_model.dart';
-import '../appointment/appointment_screen.dart';
+import '../appointment/appointment_book_screen.dart';
 import 'doctor_card.dart';
 
 class DoctorsListView extends StatelessWidget {
@@ -23,7 +23,7 @@ class DoctorsListView extends StatelessWidget {
           description: "${doctor.briefDesc}",
           imagePath: doctor.imageUrl ?? "", // Use custom image
           onPressed: () {
-            Navigator.pushNamed(context, AppointmentScreen.route,arguments: doctor);
+            Navigator.pushNamed(context, AppointmentBookScreen.route,arguments: doctor);
           },
         );
       },

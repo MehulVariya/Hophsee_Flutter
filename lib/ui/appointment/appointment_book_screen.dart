@@ -8,17 +8,17 @@ import '../dashboard/doctor_card.dart';
 import '../payment/payment_design.dart';
 import '../profile/profile_design.dart';
 
-class AppointmentScreen extends StatefulWidget {
+class AppointmentBookScreen extends StatefulWidget {
   final Doctor doctor;
-  static const route = '/appointment_screen';
+  static const route = '/appointment_book_screen';
 
-  const AppointmentScreen({super.key, required this.doctor});
+  const AppointmentBookScreen({super.key, required this.doctor});
 
   @override
-  State<AppointmentScreen> createState() => _AppointmentDesignState();
+  State<AppointmentBookScreen> createState() => _AppointmentDesignState();
 }
 
-class _AppointmentDesignState extends State<AppointmentScreen> {
+class _AppointmentDesignState extends State<AppointmentBookScreen> {
   String selectedDate = ''; // Variable to store the selected date
   String selectedTime = ''; // Variable to store the selected time
 
@@ -27,10 +27,6 @@ class _AppointmentDesignState extends State<AppointmentScreen> {
     bool isButtonEnabled = selectedDate.isNotEmpty && selectedTime.isNotEmpty;
 
     return Scaffold(
-      appBar: AppBar(
-        //title: Text('Help Me'),
-        backgroundColor: Colors.white,
-      ),
       body: Stack(
         // Wrap the Scaffold with a Stack
         children: [
@@ -84,7 +80,7 @@ class _AppointmentDesignState extends State<AppointmentScreen> {
                   child: ElevatedButton(
                     onPressed: isButtonEnabled
                         ? () {
-                      Navigator.pushNamed(context, PaymentDesign.route);
+                            Navigator.pushNamed(context, PaymentDesign.route);
                           }
                         : null,
                     // Disable the button if date or time is not selected
