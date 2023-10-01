@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark, // Set the dark theme
         // Define dark theme properties.
       ),*/
-      initialRoute: '/',
+      initialRoute: '/appointment_list_screen',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

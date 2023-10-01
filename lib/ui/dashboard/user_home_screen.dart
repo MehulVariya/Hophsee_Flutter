@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:hophseeflutter/ui/appointment/appointment_list_screen.dart';
 import '../appointment/appointment_book_screen.dart';
 import '../doctordetails/doctor_list_screen.dart';
 import '../profile/profile_design.dart';
@@ -16,25 +17,24 @@ class UserHomeScreen extends StatefulWidget {
 class _HomeState extends State<UserHomeScreen> {
   final items = const [
     Icon(
+      Icons.home_outlined,
+      size: 30,
+    ),
+    Icon(
       Icons.list_alt,
       size: 30,
     ),
     Icon(
-      Icons.home_outlined,
-      size: 30,
-    ),
-    /*
-    Icon(
       Icons.calendar_today,
       size: 30,
-    ),*/
+    ),
     Icon(
       Icons.person_outline,
       size: 30,
     )
   ];
 
-  int index = 1;
+  int index = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +66,13 @@ class _HomeState extends State<UserHomeScreen> {
           isBack: false,
         );
         break;
-      /*
-      case 1:
-        widget = const AppointmentScreen();
-        break;*/
       case 1:
         widget = const MyHome();
         break;
       case 2:
+        widget = const AppointmentListScreen();
+        break;
+      case 3:
         widget = const ProfileDesign(isNotBackArrow: false);
         break;
       default:

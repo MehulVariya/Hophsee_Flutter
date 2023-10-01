@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/data/module/doctor_model.dart';
 import 'package:hophseeflutter/ui/appointment/appointment_book_screen.dart';
+import 'package:hophseeflutter/ui/appointment/appointment_list_screen.dart';
 import 'package:hophseeflutter/ui/dashboard/user_home_screen.dart';
 import 'package:hophseeflutter/ui/doctordetails/doctor_list_screen.dart';
 import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
@@ -42,7 +43,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const PaymentDesign());
 
       case PaymentDoneDesign.route:
-        return MaterialPageRoute(builder: (_) => PaymentDoneDesign(amount: args as int,));
+        return MaterialPageRoute(
+            builder: (_) => PaymentDoneDesign(
+                  amount: args as int,
+                ));
 
       case SettingsPage.route:
         return MaterialPageRoute(builder: (_) => SettingsPage());
@@ -52,6 +56,9 @@ class RouteGenerator {
 
       case EditProfileScreen.route:
         return MaterialPageRoute(builder: (_) => EditProfileScreen());
+
+      case AppointmentListScreen.route:
+        return MaterialPageRoute(builder: (_) => AppointmentListScreen());
 
       case DoctorListScreen.route:
         return MaterialPageRoute(
