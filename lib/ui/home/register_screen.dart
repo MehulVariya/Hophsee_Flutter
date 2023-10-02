@@ -127,8 +127,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             dateOfBirth: dateOfBirth,
                           );
                           print("user : ${user.toJson()}");
-                          ApiServiceImpl(Dio())
-                              .registerUser(user, imageFile!)
+                          apiService.registerUser(user, imageFile!)
                               .then((value) {
                             if (value.error == 0) {
                               // Successfully registered, perform login or other actions
