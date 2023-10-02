@@ -21,7 +21,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   void displayContent(BuildContext context) async {
     Map<String, dynamic> data = await Preference.getLoginConfig();
-    String navigate = data[IS_LOGIN]
+    String navigate = data[IS_LOGIN_PREFERENCE]
         ? data[IS_DOCTOR_PREFERENCE]
             ? DoctorHomeScreen.route
             : UserHomeScreen.route

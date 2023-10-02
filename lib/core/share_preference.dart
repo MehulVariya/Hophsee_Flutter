@@ -70,7 +70,6 @@ class Preference {
     prefs.remove(IMAGE_URL_PREFERENCE);
     prefs.remove(IS_DOCTOR_PREFERENCE);
   }
-
   static Future<Map<String, dynamic>> getLoginConfig() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? doctorId = prefs.getInt(DOCTOR_ID_PREFERENCE);
@@ -79,7 +78,7 @@ class Preference {
 
     bool isLogin = (doctorId != null) || (userId != null);
     Map<String, dynamic> data = {};
-    data[IS_LOGIN] = isLogin;
+    data[IS_LOGIN_PREFERENCE] = isLogin;
     data[IS_DOCTOR_PREFERENCE] = isDoctor;
     return data;
   }
