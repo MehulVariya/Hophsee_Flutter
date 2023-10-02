@@ -9,6 +9,8 @@ import 'package:hophseeflutter/data/module/payment_page_required.dart';
 
 import '../../core/constant.dart';
 import '../../core/utils.dart';
+import '../../ui/appointment/appointment_list_screen.dart';
+import '../module/appo_model.dart';
 import '../module/user_login_model.dart';
 import '../module/response_query.dart';
 import '../module/user_model.dart';
@@ -128,6 +130,19 @@ class ApiServiceImpl extends ApiService {
       return doctorsResponse;
     } on Exception catch (error) {
       return DoctorList.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
+  @override
+  Future<AppoList> getAppoList() async {
+    try {
+      final response = await dio.get(
+        appoEp,
+      );
+      AppoList appoListResponse = AppoList.fromJson(response.data);
+      return appoListResponse;
+    } on Exception catch (error) {
+      return AppoList.fromJson(getErrorMap("Http Error"));
     }
   }
 
