@@ -82,9 +82,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                CustomDatePicker(onClick: () {
-                  pickDateDialog();
-                }),
+                CustomDatePicker(
+                  onClick: () {
+                    pickDateDialog();
+                  },
+                  selectedDate: _selectedDate, // Pass the selected date here
+                ),
                 const SizedBox(height: 5),
                 TextFieldDesign(
                   hintText: 'Password',
