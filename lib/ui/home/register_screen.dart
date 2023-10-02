@@ -132,11 +132,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               .then((value) {
                             if (value.error == 0) {
                               // Successfully registered, perform login or other actions
+                              loginUser(apiService, context, email, password);
                             } else {
                               showSnackbar(context, "Something went wrong");
                             }
                           }, onError: (error) {
                             print(error);
+                            showSnackbar(context, "Something went wrong");
                           });
                         },
                         style: ElevatedButton.styleFrom(
