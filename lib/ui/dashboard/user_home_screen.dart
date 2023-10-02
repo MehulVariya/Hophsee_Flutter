@@ -34,7 +34,7 @@ class _HomeState extends State<UserHomeScreen> {
     )
   ];
 
-  int index = 2;
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,9 @@ class _HomeState extends State<UserHomeScreen> {
         );
         break;
       case 2:
-        widget = AppointmentListScreen();
+        widget = AppointmentListScreen(
+          appoList: null,
+        );
         break;
       case 3:
         widget = const ProfileDesign(isNotBackArrow: false);

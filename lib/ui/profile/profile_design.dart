@@ -142,11 +142,6 @@ class _ProfileDesignState extends State<ProfileDesign> {
                           Navigator.pushNamed(context, EditProfileScreen.route);
                         },
                       ),
-                      // ProfileMenu(
-                      //   Title: "medical Information",
-                      //   icon: Icons.medical_information,
-                      //   onPress: () {},
-                      // ),
                       const SizedBox(
                         height: 20,
                       ),

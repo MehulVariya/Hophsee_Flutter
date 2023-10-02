@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:hophseeflutter/data/module/appo_model.dart';
+import 'package:hophseeflutter/data/module/doctor_model.dart';
 
 import 'appointment_card.dart';
 
@@ -19,29 +20,35 @@ class AppointmentListScreen extends StatefulWidget {
 }
 
 class _AppointmentListScreenState extends State<AppointmentListScreen> {
+  ApiServiceImpl apiServices = ApiServiceImpl(Dio());
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     if (widget.appoList == null) {
-      ApiServiceImpl(Dio()).getAppoList().then(
+      apiServices.getAppoList().then(
         (value) {
+          Map<String, dynamic> data = {};
           widget.appoList = value;
-          _controller.sink.add(widget.appoList);
+          data["appolist"] = value.toJson();
+          apiServices.getDoctorList().then((value) {
+            data["doctorList"] = value.toJson();
+            _controller.sink.add(data);
+          });
         },
         onError: (error) {
           print(error);
         },
       );
-    } else {
-      _controller.sink.add(widget.appoList);
     }
   }
 
-  final StreamController<AppoList?> _controller = StreamController<AppoList?>();
+  final StreamController<Map<String, dynamic>> _controller =
+      StreamController<Map<String, dynamic>>();
 
   // Getter to get the stream associated with this controller.
-  Stream<AppoList?> get stream => _controller.stream;
+  Stream<Map<String, dynamic>> get stream => _controller.stream;
 
   @override
   Widget build(BuildContext context) {
@@ -50,23 +57,35 @@ class _AppointmentListScreenState extends State<AppointmentListScreen> {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: StreamBuilder<AppoList?>(
+            child: StreamBuilder<Map<String, dynamic>>(
               stream: stream, // Access the custom stream
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  Map<String, dynamic>? data = snapshot.data;
+                  List<Appo>? appoList =
+                      AppoList.fromJson(data?["appolist"]).data;
+
+                  List<Doctor>? doctorList =
+                      DoctorList.fromJson(data?["doctorList"]).data;
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 16),
                       ListView.builder(
                         shrinkWrap: true,
-                        itemCount: snapshot.data?.data?.length,
+                        itemCount: appoList?.length,
                         itemBuilder: (BuildContext context, int index) {
-                          Appo? appo = snapshot.data?.data?[index];
+                          Appo? appo = appoList?[index];
+                          Doctor? doctor = doctorList?.firstWhere((obj) =>
+                                  obj.doctorId ==
+                                  appo?.doctorId // Provide a default value if the object is not found
+                              );
                           if (appo != null) {
                             return AppointmentCard(
-                              appo: appo,
-                            );
+                                appoDate: appo.appoDt ?? "",
+                                appoTime: appo.appoTime ?? "",
+                                doctorName: doctor?.doctorName ?? "");
                           }
                         },
                       ),

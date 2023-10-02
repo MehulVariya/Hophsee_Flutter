@@ -134,6 +134,32 @@ class ApiServiceImpl extends ApiService {
   }
 
   @override
+  Future<DoctorList> getDoctorById() async {
+    try {
+      final response = await dio.get(
+        "$doctorEp",
+      );
+      DoctorList doctorsResponse = DoctorList.fromJson(response.data);
+      return doctorsResponse;
+    } on Exception catch (error) {
+      return DoctorList.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
+  @override
+  Future<DoctorList> getUserById() async {
+    try {
+      final response = await dio.get(
+        "$userEp",
+      );
+      DoctorList doctorsResponse = DoctorList.fromJson(response.data);
+      return doctorsResponse;
+    } on Exception catch (error) {
+      return DoctorList.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
+  @override
   Future<AppoList> getAppoList() async {
     try {
       final response = await dio.get(

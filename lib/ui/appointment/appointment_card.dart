@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/data/module/doctor_model.dart';
+import 'package:hophseeflutter/data/module/user_model.dart';
 
 import '../../data/module/appo_model.dart';
 
 class AppointmentCard extends StatelessWidget {
-  final Appo appo;
+  final String appoDate;
+  final String appoTime;
+  final String doctorName;
 
-  AppointmentCard({required this.appo});
+  AppointmentCard(
+      {
+      /* required this.user, required this.doctor*/
+      required this.appoDate,
+      required this.appoTime,
+      required this.doctorName});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +27,7 @@ class AppointmentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Appointment Id: ${appo.appoId}',
+              'Doctor: $doctorName',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -27,7 +36,7 @@ class AppointmentCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Doctor: ${appo.doctorId}', // Replace with the actual doctor name
+              'Date: $appoDate',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey, // Customize the text color
@@ -35,15 +44,7 @@ class AppointmentCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Date: ${appo.appoDt}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey, // Customize the text color
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Time: ${appo.appoTime}',
+              'Time: $appoTime',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey, // Customize the text color
