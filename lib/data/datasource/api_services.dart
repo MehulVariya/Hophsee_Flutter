@@ -34,11 +34,16 @@ abstract class ApiService {
 
   Future<UserModel> getUserById(int userId);
 
-  Future<AppoList> getAppoList();
+  Future<AppoList> getAppoList(
+      {int? doctorId, int? userId, int? isHospitalVisit});
 
-  Future<DoctorList> getDoctorById();
+  Future<DoctorList> getDoctorById(int doctorId);
 
-  Future<ResponseQuery> editUserProfile(int userId,String userName,String emailId,String phoneNumber,String gender);
+  Future<ResponseQuery> editUserProfile(int userId, String userName,
+      String emailId, String phoneNumber, String gender);
+
+  Future<ResponseQuery> editDoctorProfile(int userId, String userName,
+      String emailId, String phoneNumber, String gender);
 }
 
 class ApiServiceImpl extends ApiService {
@@ -97,8 +102,8 @@ class ApiServiceImpl extends ApiService {
       String password = user.password ?? "";
       String gender = user.gender ?? "";
       String dateOfBirth = user.dateOfBirth ?? "";
-      bool isDoctor = false;
-      bool isActive = true;
+      int isDoctor = 0;
+      int isActive = 1;
       FormData formData = FormData.fromMap({
         "image_url":
             await MultipartFile.fromFile(file.path, filename: fileName),
@@ -144,10 +149,10 @@ class ApiServiceImpl extends ApiService {
   }
 
   @override
-  Future<DoctorList> getDoctorById() async {
+  Future<DoctorList> getDoctorById(int doctorId) async {
     try {
       final response = await dio.get(
-        "$doctorEp",
+        "$doctorEp/$doctorId",
       );
       DoctorList doctorsResponse = DoctorList.fromJson(response.data);
       return doctorsResponse;
@@ -156,9 +161,8 @@ class ApiServiceImpl extends ApiService {
     }
   }
 
-
   @override
-  Future<UserModel> getUserList() async{
+  Future<UserModel> getUserList() async {
     try {
       final response = await dio.get(
         userEp,
@@ -184,19 +188,6 @@ class ApiServiceImpl extends ApiService {
       return userResponse;
     } on Exception catch (error) {
       return UserModel.fromJson(getErrorMap("Http Error"));
-    }
-  }
-
-  @override
-  Future<AppoList> getAppoList() async {
-    try {
-      final response = await dio.get(
-        appoEp,
-      );
-      AppoList appoListResponse = AppoList.fromJson(response.data);
-      return appoListResponse;
-    } on Exception catch (error) {
-      return AppoList.fromJson(getErrorMap("Http Error"));
     }
   }
 
@@ -267,14 +258,15 @@ class ApiServiceImpl extends ApiService {
   }
 
   @override
-  Future<ResponseQuery> editUserProfile(int userId,String userName,String emailId,String phoneNumber,String gender) async {
+  Future<ResponseQuery> editUserProfile(int userId, String userName,
+      String emailId, String phoneNumber, String gender) async {
     try {
-      Map<String,dynamic> data={};
-      data["user_id"]=userId;
-      data["user_name"]=userName;
-      data["email_id"]=emailId;
-      data["phone_no"]=phoneNumber;
-      data["gender"]=gender;
+      Map<String, dynamic> data = {};
+      data["user_id"] = userId;
+      data["user_name"] = userName;
+      data["email_id"] = emailId;
+      data["phone_no"] = phoneNumber;
+      data["gender"] = gender;
       final response = await dio.patch(
         userEp,
         data: data,
@@ -292,4 +284,46 @@ class ApiServiceImpl extends ApiService {
     }
   }
 
+  @override
+  Future<AppoList> getAppoList(
+      {int? doctorId, int? userId, int? isHospitalVisit}) async {
+    try {
+      final response = await dio.get(appoEp, queryParameters: {
+        "user_id": userId,
+        "doctor_id": doctorId,
+        "is_hospital_visit": isHospitalVisit
+      });
+      print("object api call : ${response.realUri}");
+      AppoList appoListResponse = AppoList.fromJson(response.data);
+      return appoListResponse;
+    } on Exception catch (error) {
+      return AppoList.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
+  @override
+  Future<ResponseQuery> editDoctorProfile(int userId, String userName, String emailId, String phoneNumber, String gender) async{
+    try {
+      Map<String, dynamic> data = {};
+      data["doctor_id"] = userId;
+      data["doctor_name"] = userName;
+      data["email_id"] = emailId;
+      data["phone_no"] = phoneNumber;
+      data["gender"] = gender;
+      final response = await dio.patch(
+        doctorEp,
+        data: data,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json', // Set the Content-Type header
+          },
+        ),
+      );
+      ResponseQuery registerUserResponse =
+      ResponseQuery.fromJson(response.data);
+      return registerUserResponse;
+    } on Exception catch (error) {
+      return ResponseQuery.fromJson(getErrorMap("Http Error"));
+    }
+  }
 }

@@ -1,4 +1,6 @@
 const host = "http://192.168.12.108:8000";
+//const host = "http://localhost:8000";
+//const host = "http://192.168.56.1:8000";
 
 const userEp = "$host/users";
 const loginUserEp = "$userEp/login";

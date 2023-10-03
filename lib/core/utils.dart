@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hophseeflutter/core/share_preference.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:hophseeflutter/data/module/categories.dart';
+import 'package:intl/intl.dart';
 
 import '../ui/dashboard/user_home_screen.dart';
 
@@ -112,4 +113,13 @@ String convertToyyyymmdd(String inputDate) {
     return formattedDate;
   }
   return "";
+}
+
+String getENDate(String isoDate) {
+  DateTime dateTime = DateTime.parse(isoDate);
+
+  // Format the date in Indian yyyy-MM-dd format
+  String indianDateFormat = DateFormat('yyyy-MM-dd', 'en_IN').format(dateTime);
+
+  return indianDateFormat;
 }

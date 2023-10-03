@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/core/constant.dart';
+import 'package:hophseeflutter/core/share_preference.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:hophseeflutter/data/module/appo_model.dart';
 import 'package:hophseeflutter/data/module/doctor_model.dart';
 
+import '../../core/utils.dart';
 import 'appointment_card.dart';
 
 class AppointmentListScreen extends StatefulWidget {
@@ -27,22 +30,35 @@ class _AppointmentListScreenState extends State<AppointmentListScreen> {
     // TODO: implement initState
     super.initState();
     if (widget.appoList == null) {
-      apiServices.getAppoList().then(
-        (value) {
-          Map<String, dynamic> data = {};
-          widget.appoList = value;
-          data["appolist"] = value.toJson();
-          apiServices.getDoctorList().then((value) {
-            data["doctorList"] = value.toJson();
-            _controller.sink.add(data);
-          }, onError: (error) {
+      Preference.getValueFromSharedPreferences(USER_ID_PREFERENCE)
+          .then((value) {
+        print("object $value");
+
+        apiServices.getAppoList(userId: value).then(
+          (value) {
+            print("object ${value.toString()}");
+
+            Map<String, dynamic> data = {};
+            widget.appoList = value;
+            data["appolist"] = value.toJson();
+            List<Appo>? appoList = value.data;
+            print("object ${appoList.toString()}");
+            if (value.error == 0 && appoList != null && appoList.isNotEmpty) {
+              apiServices.getDoctorList().then((value) {
+                data["doctorList"] = value.toJson();
+                _controller.sink.add(data);
+              }, onError: (error) {
+                print(error);
+              });
+            } else {
+              _controller.sink.add({"isEmptyData": true});
+            }
+          },
+          onError: (error) {
             print(error);
-          });
-        },
-        onError: (error) {
-          print(error);
-        },
-      );
+          },
+        );
+      });
     }
   }
 
@@ -64,35 +80,43 @@ class _AppointmentListScreenState extends State<AppointmentListScreen> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   Map<String, dynamic>? data = snapshot.data;
+                  print("object $data");
+                  if (data?["isEmptyData"] == true) {
+                    return const Center(
+                      child: Text("Empty Appoinment"),
+                    );
+                  }
                   List<Appo>? appoList =
                       AppoList.fromJson(data?["appolist"]).data;
-
-                  List<Doctor>? doctorList =
-                      DoctorList.fromJson(data?["doctorList"]).data;
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 16),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: appoList?.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Appo? appo = appoList?[index];
-                          Doctor? doctor = doctorList?.firstWhere((obj) =>
-                                  obj.doctorId ==
-                                  appo?.doctorId // Provide a default value if the object is not found
-                              );
-                          if (appo != null) {
+                  if (appoList != null && appoList.isNotEmpty) {
+                    List<Doctor>? doctorList =
+                        DoctorList.fromJson(data?["doctorList"]).data;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 16),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: appoList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            Appo? appo = appoList[index];
+                            Doctor? doctor = doctorList?.firstWhere((obj) =>
+                                    obj.doctorId ==
+                                    appo.doctorId // Provide a default value if the object is not found
+                                );
                             return AppointmentCard(
-                                appoDate: appo.appoDt ?? "",
+                                appoDate: getENDate(appo.appoDt ?? ""),
                                 appoTime: appo.appoTime ?? "",
                                 doctorName: doctor?.doctorName ?? "");
-                          }
-                        },
-                      ),
-                    ],
-                  );
+                          },
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const Center(
+                      child: Text("Empty Appointment"),
+                    );
+                  }
                 } else {
                   return Center(
                     child: Text("Loading..."),

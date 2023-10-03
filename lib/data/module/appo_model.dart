@@ -16,6 +16,11 @@ class AppoList {
     }
   }
 
+  @override
+  String toString() {
+    return 'AppoList{error: $error, message: $message, data: $data}';
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['error'] = this.error;
@@ -36,16 +41,18 @@ class Appo {
   String? appoTime;
   int? isHospitalVisit;
   int? isApprove;
+  int? isActive;
 
   Appo(
       {this.appoId,
-      this.userId,
-      this.doctorId,
-      this.paymentId,
-      this.appoDt,
-      this.appoTime,
-      this.isHospitalVisit,
-      this.isApprove});
+        this.userId,
+        this.doctorId,
+        this.paymentId,
+        this.appoDt,
+        this.appoTime,
+        this.isHospitalVisit,
+        this.isApprove,
+        this.isActive});
 
   Appo.fromJson(Map<String, dynamic> json) {
     appoId = json['appo_id'];
@@ -56,6 +63,12 @@ class Appo {
     appoTime = json['appo_time'];
     isHospitalVisit = json['is_hospital_visit'];
     isApprove = json['is_approve'];
+    isActive = json['is_active'];
+  }
+
+  @override
+  String toString() {
+    return 'Appo{appoId: $appoId, userId: $userId, doctorId: $doctorId, paymentId: $paymentId, appoDt: $appoDt, appoTime: $appoTime, isHospitalVisit: $isHospitalVisit, isApprove: $isApprove, isActive: $isActive}';
   }
 
   Map<String, dynamic> toJson() {
@@ -68,6 +81,7 @@ class Appo {
     data['appo_time'] = this.appoTime;
     data['is_hospital_visit'] = this.isHospitalVisit;
     data['is_approve'] = this.isApprove;
+    data['is_active'] = this.isActive;
     return data;
   }
 }

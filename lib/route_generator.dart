@@ -60,7 +60,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => HelpMePage());
 
       case EditProfileScreen.route:
-        return MaterialPageRoute(builder: (_) => EditProfileScreen(user: args as User));
+        return MaterialPageRoute(builder: (_) => EditProfileScreen(isDoctor: args as bool));
 
       case AppointmentListScreen.route:
         return MaterialPageRoute(builder: (_) => AppointmentListScreen());

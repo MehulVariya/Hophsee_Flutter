@@ -144,7 +144,12 @@ class _ProfileDesignState extends State<ProfileDesign> {
                         Title: "Personal Detail",
                         icon: Icons.perm_identity,
                         onPress: () async {
-                          int userId =
+                          bool isDoctor = await Preference.getValueFromSharedPreferences(
+                              IS_DOCTOR_PREFERENCE);
+                          Navigator.pushNamed(
+                              context, EditProfileScreen.route,
+                              arguments: isDoctor);
+                       /*   int userId =
                               await Preference.getValueFromSharedPreferences(
                                   USER_ID_PREFERENCE);
                           print("user : $userId");
@@ -155,7 +160,7 @@ class _ProfileDesignState extends State<ProfileDesign> {
                                 arguments: value.data?[0]);
                           }, onError: (error) {
                             showSnackbar(context, "Something went wrong..");
-                          });
+                          });*/
                         },
                       ),
                       const SizedBox(

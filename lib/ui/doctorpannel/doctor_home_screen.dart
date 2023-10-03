@@ -7,6 +7,7 @@ import 'package:hophseeflutter/core/utils.dart';
 import 'package:hophseeflutter/data/module/user_model.dart';
 import 'package:hophseeflutter/ui/doctorpannel/appo_item_card.dart';
 import '../../core/constant.dart';
+import '../../core/share_preference.dart';
 import '../../core/widget/custome_app_bar.dart';
 import '../../data/datasource/api_services.dart';
 import '../../data/module/appo_model.dart';
@@ -33,22 +34,30 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
     // TODO: implement initState
     super.initState();
     if (widget.appoList == null) {
-      apiService.getAppoList().then(
-        (value) {
-          Map<String, dynamic> data = {};
-          widget.appoList = value;
-          data["appolist"] = value.toJson();
-          apiService.getUserList().then((value) {
-            data["userList"] = value.toJson();
-            _controller.sink.add(data);
-          }, onError: (error) {
+      Preference.getValueFromSharedPreferences(DOCTOR_ID_PREFERENCE)
+          .then((value) {
+        apiService.getAppoList(doctorId: value).then(
+          (value) {
+            Map<String, dynamic> data = {};
+            widget.appoList = value;
+            data["appolist"] = value.toJson();
+            List<Appo>? appoList = value.data;
+            if (value.error == 0 && appoList != null && appoList.isNotEmpty) {
+              apiService.getUserList().then((value) {
+                data["userList"] = value.toJson();
+                _controller.sink.add(data);
+              }, onError: (error) {
+                print(error);
+              });
+            } else {
+              _controller.sink.add({"isEmptyData": true});
+            }
+          },
+          onError: (error) {
             print(error);
-          });
-        },
-        onError: (error) {
-          print(error);
-        },
-      );
+          },
+        );
+      });
     }
   }
 
@@ -86,29 +95,41 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     Map<String, dynamic>? data = snapshot.data;
+                    if (data?["isEmptyData"] == true) {
+                      return const Center(
+                        child: Text("Empty Appointment"),
+                      );
+                    }
                     List<Appo>? appoList =
                         AppoList.fromJson(data?["appolist"]).data;
-                    List<User>? userList =
-                        UserModel.fromJson(data?["userList"]).data;
                     print("length of list : ${appoList?.length}");
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      padding: const EdgeInsets.all(0),
-                      itemCount: appoList?.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Appo? appo = appoList?[index];
-                        User? user = userList?.firstWhere((obj) =>
-                                obj.userId ==
-                                appo?.userId // Provide a default value if the object is not found
-                            );
-                        return AppoItemCard(
-                          name: "${user?.userName}",
-                          gender: "${user?.gender}",
-                          age: "${user?.dateOfBirth}",
-                          imagePath: user?.imageUrl ?? "",
-                        );
-                      },
-                    );
+                    if (appoList != null && appoList.isNotEmpty) {
+                      List<User>? userList =
+                          UserModel.fromJson(data?["userList"]).data;
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        padding: const EdgeInsets.all(0),
+                        itemCount: appoList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Appo? appo = appoList[index];
+                          User? user = userList?.firstWhere((obj) =>
+                                  obj.userId ==
+                                  appo.userId // Provide a default value if the object is not found
+                              );
+                          return AppoItemCard(
+                            name: "${user?.userName}",
+                            date: getENDate("${appo.appoDt}"),
+                            time: "${appo.appoTime}",
+                            imagePath: user?.imageUrl ?? "",
+                            email: "${user?.emailId}",
+                          );
+                        },
+                      );
+                    } else {
+                      return const Center(
+                        child: Text("Empty Appointment"),
+                      );
+                    }
                   }
                   return const Center(
                     child: Text("Please wait.."),
@@ -116,7 +137,9 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                 },
               ),
             ),
-            SizedBox(height: 5.h,)
+            SizedBox(
+              height: 5.h,
+            )
           ],
         ),
       ),

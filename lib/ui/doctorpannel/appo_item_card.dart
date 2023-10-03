@@ -6,15 +6,14 @@ class AppoItemCard extends StatelessWidget {
   const AppoItemCard({
     Key? key,
     required this.name,
-    required this.gender,
-    required this.age,
-    required this.imagePath,
+    required this.imagePath, required this.date, required this.time, required this.email,
   }) : super(key: key);
 
   final String name;
-  final String gender;
+  final String date;
+  final String time;
+  final String email;
   final String imagePath;
-  final String age;
 
   @override
   Widget build(BuildContext context) {
@@ -58,26 +57,41 @@ class AppoItemCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  name,
+                  "Name : $name",
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                Text(
+                  'Date: $date',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey, // Customize the text color
+                  ),
+                ),
+                Text(
+                  'Time: $time',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey, // Customize the text color
+                  ),
+                ),
                 Row(
                   children: [
                     Text(
-                      gender,
+                      "Email : $email",
                       style: const TextStyle(
                         fontSize: 14,
+                        color: Colors.grey,
                       ),
                     ),
-                    Text(
+                   /* Text(
                       age,
                       style: const TextStyle(
                         fontSize: 14,
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
               ],
