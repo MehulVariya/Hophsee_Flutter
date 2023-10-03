@@ -35,6 +35,8 @@ class _AppointmentListScreenState extends State<AppointmentListScreen> {
           apiServices.getDoctorList().then((value) {
             data["doctorList"] = value.toJson();
             _controller.sink.add(data);
+          }, onError: (error) {
+            print(error);
           });
         },
         onError: (error) {

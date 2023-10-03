@@ -24,6 +24,8 @@ abstract class ApiService {
 
   Future<DoctorList> getDoctorList();
 
+  Future<UserModel> getUserList();
+
   Future<ResponseQuery> addPaymentDetails(
       PaymentPageRequired paymentPageRequired, int amount);
 
@@ -154,6 +156,20 @@ class ApiServiceImpl extends ApiService {
     }
   }
 
+
+  @override
+  Future<UserModel> getUserList() async{
+    try {
+      final response = await dio.get(
+        userEp,
+      );
+      UserModel userRes = UserModel.fromJson(response.data);
+      return userRes;
+    } on Exception catch (error) {
+      return UserModel.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
   @override
   Future<UserModel> getUserById(int userId) async {
     try {
@@ -275,4 +291,5 @@ class ApiServiceImpl extends ApiService {
       return ResponseQuery.fromJson(getErrorMap("Http Error"));
     }
   }
+
 }
