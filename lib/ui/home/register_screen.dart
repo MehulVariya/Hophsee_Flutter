@@ -84,6 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 5),
                 CustomDatePicker(
                   onClick: () {
+                    hideKeyboard(context);
                     pickDateDialog();
                   },
                   selectedDate: _selectedDate, // Pass the selected date here
@@ -117,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           var password = passwordController.text;
                           var gender = selectedGender;
                           var dateOfBirth =
-                              DateFormat("dd-MM-yyyy").format(_selectedDate);
+                              DateFormat("yyyy-MM-dd").format(_selectedDate);
                           var user = User(
                             userName: userName,
                             emailId: email,

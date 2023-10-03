@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/data/module/doctor_model.dart';
+import 'package:hophseeflutter/data/module/user_model.dart';
 import 'package:hophseeflutter/ui/appointment/appointment_book_screen.dart';
 import 'package:hophseeflutter/ui/appointment/appointment_list_screen.dart';
 import 'package:hophseeflutter/ui/dashboard/user_home_screen.dart';
@@ -59,7 +60,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => HelpMePage());
 
       case EditProfileScreen.route:
-        return MaterialPageRoute(builder: (_) => EditProfileScreen());
+        return MaterialPageRoute(builder: (_) => EditProfileScreen(user: args as User));
 
       case AppointmentListScreen.route:
         return MaterialPageRoute(builder: (_) => AppointmentListScreen());

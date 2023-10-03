@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:hophseeflutter/ui/profile/help_design.dart';
 import 'package:hophseeflutter/ui/profile/setting.dart';
 import 'package:hophseeflutter/ui/profile/edit_profile_screen.dart';
@@ -31,6 +33,9 @@ class _ProfileDesignState extends State<ProfileDesign> {
 
   // Getter to get the stream associated with this controller.
   Stream<String> get image_stream => _image_controller.stream;
+
+  ApiServiceImpl apiService = ApiServiceImpl(Dio());
+
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +143,19 @@ class _ProfileDesignState extends State<ProfileDesign> {
                       ProfileMenu(
                         Title: "Personal Detail",
                         icon: Icons.perm_identity,
-                        onPress: () {
-                          Navigator.pushNamed(context, EditProfileScreen.route);
+                        onPress: () async {
+                          int userId =
+                              await Preference.getValueFromSharedPreferences(
+                                  USER_ID_PREFERENCE);
+                          print("user : $userId");
+                          apiService.getUserById(userId).then(
+                              (value) {
+                            Navigator.pushNamed(
+                                context, EditProfileScreen.route,
+                                arguments: value.data?[0]);
+                          }, onError: (error) {
+                            showSnackbar(context, "Something went wrong..");
+                          });
                         },
                       ),
                       const SizedBox(

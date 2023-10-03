@@ -1,18 +1,25 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/core/constant.dart';
+import 'package:hophseeflutter/core/share_preference.dart';
+import 'package:hophseeflutter/data/datasource/api_services.dart';
+import 'package:hophseeflutter/data/module/user_model.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import '../../core/utils.dart';
 
 class EditProfileScreen extends StatefulWidget {
   static const route = '/edit_profile_screen';
+  User user;
+
+  EditProfileScreen({super.key, required this.user});
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  String name = '';
-  String lastName = '';
+  String name = "";
   String mobileNumber = '';
   String emailAddress = '';
   String gender = 'Male'; // Default gender value
@@ -20,14 +27,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   // Store the previous values for canceling changes
   String prevName = '';
-  String prevLastName = '';
   String prevMobileNumber = '';
   String prevEmailAddress = '';
   String prevGender = 'Male';
 
   final Map<String, IconData> leadingIcons = {
     'Name': Icons.person,
-    'Last Name': Icons.person,
     'Mobile Number': Icons.phone,
     'Email Address': Icons.email,
     'Gender': LineAwesomeIcons.genderless,
@@ -37,8 +42,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     // Initialize previous values
+    name = widget.user.userName ?? "";
+    mobileNumber = widget.user.phoneNo ?? "";
+    emailAddress = widget.user.emailId ?? "";
+    gender = widget.user.gender == "M"
+        ? "Male"
+        : "Female" ?? ""; // Default gender value
     prevName = name;
-    prevLastName = lastName;
     prevMobileNumber = mobileNumber;
     prevEmailAddress = emailAddress;
     prevGender = gender;
@@ -49,7 +59,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          padding: EdgeInsets.only(left:16.0,right:16.0),
+          padding: EdgeInsets.only(left: 16.0, right: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -57,28 +67,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               SizedBox(height: 20),
               CircleAvatar(
                 radius: 60.0,
-                backgroundImage: AssetImage(profilePhotoUrl),
+                backgroundImage: NetworkImage("$host/${widget.user.imageUrl}"),
               ),
               SizedBox(height: 10),
-              ElevatedButton.icon(
+              /*    ElevatedButton.icon(
                 onPressed: () {
                   // Add logic to edit profile photo here
                 },
                 icon: Icon(Icons.edit),
                 label: Text('Edit Photo'),
-              ),
+              ),*/
               _buildEditableCard(
                 context,
                 'Name',
                 name,
                 (newValue) => setState(() => name = newValue),
               ),
-              _buildEditableCard(
+              /* _buildEditableCard(
                 context,
                 'Last Name',
                 lastName,
                 (newValue) => setState(() => lastName = newValue),
-              ),
+              ),*/
               _buildEditableCard(
                 context,
                 'Mobile Number',
@@ -100,7 +110,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _showSaveAllDialog(context);
+                  User user = User(
+                      userId: widget.user.userId,
+                      userName: name,
+                      phoneNo: mobileNumber,
+                      emailId: emailAddress,
+                      gender: gender.substring(0, 1));
+                  _showSaveAllDialog(context, user);
                 },
                 child: Text('Save All'),
               ),
@@ -214,7 +230,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  Future<void> _showSaveAllDialog(BuildContext context) async {
+  Future<void> _showSaveAllDialog(BuildContext context, User user) async {
     // Create a dialog to choose between saving and canceling all changes
     final result = await showDialog<bool>(
       context: context,
@@ -224,8 +240,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           content: Text('Do you want to save all changes?'),
           actions: [
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async{
                 Navigator.of(context).pop(true); // Save
+                ApiServiceImpl(Dio())
+                    .editUserProfile(
+                        user.userId ?? -1,
+                        user.userName ?? "",
+                        user.emailId ?? "",
+                        user.phoneNo ?? "",
+                        user.gender ?? "")
+                    .then((value) {
+                  if (value.error == 0) {
+                    Preference.putDataString(NAME_PREFERENCE, user.userName ?? "");
+                    showSnackbar(context, "Save Successfully");
+                  } else {
+                    showSnackbar(context, "Something went wrong");
+                  }
+                }, onError: (error) {
+                  print(error);
+                  showSnackbar(context, "Something went wrong");
+                });
               },
               child: Text('Save All'),
             ),
@@ -243,7 +277,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (result != null && result) {
       // Save button was pressed, keep the changes
       prevName = name;
-      prevLastName = lastName;
       prevMobileNumber = mobileNumber;
       prevEmailAddress = emailAddress;
       prevGender = gender;
@@ -252,7 +285,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       // Cancel button was pressed, restore previous values
       setState(() {
         name = prevName;
-        lastName = prevLastName;
         mobileNumber = prevMobileNumber;
         emailAddress = prevEmailAddress;
         gender = prevGender;

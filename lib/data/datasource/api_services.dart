@@ -29,6 +29,14 @@ abstract class ApiService {
 
   Future<ResponseQuery> addAppointment(
       PaymentPageRequired paymentPageRequired, int paymentId);
+
+  Future<UserModel> getUserById(int userId);
+
+  Future<AppoList> getAppoList();
+
+  Future<DoctorList> getDoctorById();
+
+  Future<ResponseQuery> editUserProfile(int userId,String userName,String emailId,String phoneNumber,String gender);
 }
 
 class ApiServiceImpl extends ApiService {
@@ -147,15 +155,19 @@ class ApiServiceImpl extends ApiService {
   }
 
   @override
-  Future<DoctorList> getUserById() async {
+  Future<UserModel> getUserById(int userId) async {
     try {
+      String apiEP = "$userEp/$userId";
+      print("apiEP : $apiEP");
       final response = await dio.get(
-        "$userEp",
+        apiEP,
       );
-      DoctorList doctorsResponse = DoctorList.fromJson(response.data);
-      return doctorsResponse;
+      print("response : ${response.data} -- $response");
+      UserModel userResponse = UserModel.fromJson(response.data);
+      print("userResponse : $userResponse");
+      return userResponse;
     } on Exception catch (error) {
-      return DoctorList.fromJson(getErrorMap("Http Error"));
+      return UserModel.fromJson(getErrorMap("Http Error"));
     }
   }
 
@@ -223,6 +235,32 @@ class ApiServiceImpl extends ApiService {
 
       final response = await dio.post(
         appoEp,
+        data: data,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json', // Set the Content-Type header
+          },
+        ),
+      );
+      ResponseQuery registerUserResponse =
+          ResponseQuery.fromJson(response.data);
+      return registerUserResponse;
+    } on Exception catch (error) {
+      return ResponseQuery.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
+  @override
+  Future<ResponseQuery> editUserProfile(int userId,String userName,String emailId,String phoneNumber,String gender) async {
+    try {
+      Map<String,dynamic> data={};
+      data["user_id"]=userId;
+      data["user_name"]=userName;
+      data["email_id"]=emailId;
+      data["phone_no"]=phoneNumber;
+      data["gender"]=gender;
+      final response = await dio.patch(
+        userEp,
         data: data,
         options: Options(
           headers: {
