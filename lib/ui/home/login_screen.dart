@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/ui/doctorpannel/doctor_dashboard.dart';
 import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
 import 'package:hophseeflutter/ui/home/register_screen.dart';
 import '../../core/constant.dart';

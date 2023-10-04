@@ -1,148 +1,68 @@
-import 'dart:async';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hophseeflutter/core/utils.dart';
-import 'package:hophseeflutter/data/module/user_model.dart';
-import 'package:hophseeflutter/ui/doctorpannel/appo_item_card.dart';
-import '../../core/constant.dart';
-import '../../core/share_preference.dart';
-import '../../core/widget/custome_app_bar.dart';
-import '../../data/datasource/api_services.dart';
-import '../../data/module/appo_model.dart';
-import '../../data/module/doctor_model.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:hophseeflutter/ui/appointment/appointment_list_screen.dart';
+import 'package:hophseeflutter/ui/doctorpannel/doctor_dashboard.dart';
+import '../appointment/appointment_book_screen.dart';
+import '../doctordetails/doctor_list_screen.dart';
+import '../profile/profile_design.dart';
 
 class DoctorHomeScreen extends StatefulWidget {
-  static const route = '/doctor_screen';
-
-  AppoList? appoList;
+  const DoctorHomeScreen({Key? key}) : super(key: key);
+  static const route = '/doctor_home_screen';
 
   @override
-  _DoctorHomeScreenState createState() => _DoctorHomeScreenState();
+  _HomeState createState() => _HomeState();
 }
 
-class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
-  ApiServiceImpl apiService = ApiServiceImpl(Dio());
-  final StreamController<Map<String, dynamic>?> _controller =
-      StreamController<Map<String, dynamic>?>();
+class _HomeState extends State<DoctorHomeScreen> {
+  final items = const [
+    Icon(
+      Icons.home_outlined,
+      size: 30,
+    ),
+    Icon(
+      Icons.person_outline,
+      size: 30,
+    )
+  ];
 
-  Stream<Map<String, dynamic>?> get stream => _controller.stream;
+  int index = 0;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    if (widget.appoList == null) {
-      Preference.getValueFromSharedPreferences(DOCTOR_ID_PREFERENCE)
-          .then((value) {
-        apiService.getAppoList(doctorId: value).then(
-          (value) {
-            Map<String, dynamic> data = {};
-            widget.appoList = value;
-            data["appolist"] = value.toJson();
-            List<Appo>? appoList = value.data;
-            if (value.error == 0 && appoList != null && appoList.isNotEmpty) {
-              apiService.getUserList().then((value) {
-                data["userList"] = value.toJson();
-                _controller.sink.add(data);
-              }, onError: (error) {
-                print(error);
-              });
-            } else {
-              _controller.sink.add({"isEmptyData": true});
-            }
-          },
-          onError: (error) {
-            print(error);
-          },
-        );
-      });
-    }
-  }
-
-/*  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 40),
-        child: Column(
-          children: [
-            const CustomAppBar(backBtn : false),
-            const Divider(),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child:
-              ),
-            ),
-          ],
-        ),
+      backgroundColor: Colors.transparent,
+      body: getSelectedWidget(index: index),
+      bottomNavigationBar: CurvedNavigationBar(
+        items: items,
+        index: index,
+        onTap: (selectedIdx) {
+          setState(() {
+            index = selectedIdx;
+          });
+        },
+        height: 60,
+        color: Colors.lightBlueAccent,
+        // Set the color to blue
+        backgroundColor: Colors.white,
+        animationDuration: const Duration(milliseconds: 300),
       ),
     );
-  }*/
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const CustomAppBar(backBtn: false),
-            Expanded(
-              child: StreamBuilder<Map<String, dynamic>?>(
-                stream: stream, // Access the custom stream
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    Map<String, dynamic>? data = snapshot.data;
-                    if (data?["isEmptyData"] == true) {
-                      return const Center(
-                        child: Text("Empty Appointment"),
-                      );
-                    }
-                    List<Appo>? appoList =
-                        AppoList.fromJson(data?["appolist"]).data;
-                    print("length of list : ${appoList?.length}");
-                    if (appoList != null && appoList.isNotEmpty) {
-                      List<User>? userList =
-                          UserModel.fromJson(data?["userList"]).data;
-                      return ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.all(0),
-                        itemCount: appoList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Appo? appo = appoList[index];
-                          User? user = userList?.firstWhere((obj) =>
-                                  obj.userId ==
-                                  appo.userId // Provide a default value if the object is not found
-                              );
-                          return AppoItemCard(
-                            name: "${user?.userName}",
-                            date: getENDate("${appo.appoDt}"),
-                            time: "${appo.appoTime}",
-                            imagePath: user?.imageUrl ?? "",
-                            email: "${user?.emailId}",
-                          );
-                        },
-                      );
-                    } else {
-                      return const Center(
-                        child: Text("Empty Appointment"),
-                      );
-                    }
-                  }
-                  return const Center(
-                    child: Text("Please wait.."),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 5.h,
-            )
-          ],
-        ),
-      ),
-    );
+  }
+
+  Widget getSelectedWidget({required int index}) {
+    Widget widget;
+    switch (index) {
+      case 0:
+        widget = DoctorDashboardScreen();
+        break;
+      case 1:
+        widget = const ProfileDesign(isNotBackArrow: false);
+        break;
+      default:
+        widget = DoctorDashboardScreen();
+        break;
+    }
+    return widget;
   }
 }

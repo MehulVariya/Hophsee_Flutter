@@ -5,6 +5,7 @@ import 'package:hophseeflutter/ui/appointment/appointment_book_screen.dart';
 import 'package:hophseeflutter/ui/appointment/appointment_list_screen.dart';
 import 'package:hophseeflutter/ui/dashboard/user_home_screen.dart';
 import 'package:hophseeflutter/ui/doctordetails/doctor_list_screen.dart';
+import 'package:hophseeflutter/ui/doctorpannel/doctor_dashboard.dart';
 import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
 import 'package:hophseeflutter/ui/home/login_screen.dart';
 import 'package:hophseeflutter/ui/home/register_screen.dart';
@@ -36,11 +37,14 @@ class RouteGenerator {
       case UserHomeScreen.route:
         return MaterialPageRoute(builder: (_) => const UserHomeScreen());
 
-      case DoctorHomeScreen.route:
-        return MaterialPageRoute(builder: (_) => DoctorHomeScreen());
+      case DoctorDashboardScreen.route:
+        return MaterialPageRoute(builder: (_) => DoctorDashboardScreen());
 
       case ProfileDesign.route:
         return MaterialPageRoute(builder: (_) => const ProfileDesign());
+
+      case DoctorHomeScreen.route:
+        return MaterialPageRoute(builder: (_) => const DoctorHomeScreen());
 
       case PaymentDesign.route:
         return MaterialPageRoute(
@@ -60,7 +64,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => HelpMePage());
 
       case EditProfileScreen.route:
-        return MaterialPageRoute(builder: (_) => EditProfileScreen(isDoctor: args as bool));
+        return MaterialPageRoute(
+            builder: (_) => EditProfileScreen(isDoctor: args as bool));
 
       case AppointmentListScreen.route:
         return MaterialPageRoute(builder: (_) => AppointmentListScreen());

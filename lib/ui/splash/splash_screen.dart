@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/core/constant.dart';
+import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
 import 'package:hophseeflutter/ui/home/login_screen.dart';
 
 import '../../core/share_preference.dart';
 import '../../core/utils.dart';
 import '../dashboard/user_home_screen.dart';
-import '../doctorpannel/doctor_home_screen.dart';
+import '../doctorpannel/doctor_dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
   static const route = '/';
