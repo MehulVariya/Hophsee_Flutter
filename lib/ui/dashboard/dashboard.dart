@@ -27,7 +27,7 @@ class _MyHomeState extends State<MyHome> {
   ApiServiceImpl apiService = ApiServiceImpl(Dio());
   DoctorList? doctorList;
   final StreamController<DoctorList?> _controller =
-      StreamController<DoctorList?>();
+  StreamController<DoctorList?>();
 
   // Getter to get the stream associated with this controller.
   Stream<DoctorList?> get stream => _controller.stream;
@@ -38,7 +38,7 @@ class _MyHomeState extends State<MyHome> {
     super.initState();
     if (doctorList == null) {
       apiService.getDoctorList().then(
-        (value) {
+            (value) {
           doctorList = value;
           _controller.sink.add(doctorList);
         },
@@ -98,6 +98,14 @@ class _MyHomeState extends State<MyHome> {
                 stream: stream, // Access the custom stream
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    int numberOfItrate = 0;
+                    if ((snapshot.data?.data?.length ?? 0)
+                        <
+                        3) {
+                      numberOfItrate = snapshot.data?.data?.length ?? 0;
+                    } else {
+                      numberOfItrate = 3;
+                    };
                     return Column(
                       children: [
                         Padding(
@@ -126,14 +134,15 @@ class _MyHomeState extends State<MyHome> {
                           width: double.infinity,
                           height: 170.h,
                           child: DoctorsListView(
-                            data: snapshot.data?.data?.sublist(0, 3) ?? [],
+                            data: snapshot.data?.data?.sublist(0,numberOfItrate) ?? [],
                           ),
                         ),
                       ],
                     );
                   }
                   return const Center(
-                    child: Text("Please wait.."),
+                    child: Text("Please wait..")
+                    ,
                   );
                 },
               ),

@@ -201,9 +201,10 @@ class ApiServiceImpl extends ApiService {
       int userId =
           await Preference.getValueFromSharedPreferences(USER_ID_PREFERENCE);
       data["payer_id"] = userId;
-      data["payee_id"] = 8;
+      data["payee_id"] = 7;
       data["payer_type"] = "user";
       data["payee_type"] = "admin";
+      data["admin_id"] = 7;
       data["payment_ammount"] = amount;
 
       final response = await dio.post(
