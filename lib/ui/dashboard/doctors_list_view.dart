@@ -12,6 +12,9 @@ class DoctorsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(data.isEmpty){
+      return const Center(child: Text("Doctor not present"),);
+    }
     return ListView.builder(
       scrollDirection: Axis.vertical,
       padding: const EdgeInsets.all(0),
