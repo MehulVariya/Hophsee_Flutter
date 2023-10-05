@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/core/extfunction.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -15,6 +16,7 @@ import 'gender_drop_down.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key});
+
   static const route = '/register_screen';
 
   @override
@@ -46,7 +48,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.1,
+            top: MediaQuery
+                .of(context)
+                .size
+                .height * 0.1,
           ),
           child: Form(
             key: _formKey,
@@ -77,6 +82,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
+                    } else if (value.isValidEmail) {
+                      return 'Enter with valid email';
                     }
                     return null; // Return null if the input is valid
                   },
@@ -135,11 +142,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.5,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.5,
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          if(imageFile == null){
+                          if (imageFile == null) {
                             showSnackbar(context, "Select Your Profile Image");
                             return;
                           }
@@ -149,7 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           var password = passwordController.text;
                           var gender = selectedGender;
                           var dateOfBirth =
-                              DateFormat("yyyy-MM-dd").format(_selectedDate);
+                          DateFormat("yyyy-MM-dd").format(_selectedDate);
                           var user = User(
                             userName: userName,
                             emailId: email,
@@ -221,17 +231,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ClipOval(
                 child: imageFile != null
                     ? Image.file(
-                        imageFile!,
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      )
+                  imageFile!,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                )
                     : Image.asset(
-                        'assets/placeholder.png',
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      ),
+                  'assets/placeholder.png',
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                ),
               ),
               Align(
                 alignment: Alignment.bottomRight,

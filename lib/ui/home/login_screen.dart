@@ -58,8 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
-                  }
-                  if (value.isValidEmail) {
+                  } else if (value.isValidEmail) {
                     return 'Enter with valid email';
                   }
                   return null; // Return null if the input is valid
