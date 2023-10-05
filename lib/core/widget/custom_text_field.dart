@@ -6,6 +6,7 @@ class TextFieldDesign extends StatelessWidget {
   final Icon prefixIcon;
   final bool isObscure;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   const TextFieldDesign(
       {Key? key,
@@ -13,16 +14,17 @@ class TextFieldDesign extends StatelessWidget {
         this.labelText="",
         required this.prefixIcon,
         required this.controller,
-        this.isObscure = false})
+        this.isObscure = false, this.validator})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         obscureText: isObscure,
+        validator: validator,
         decoration: InputDecoration(
           fillColor: Colors.white38,
           filled: true,

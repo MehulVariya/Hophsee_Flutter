@@ -29,6 +29,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   ApiServiceImpl apiService = ApiServiceImpl(Dio());
   String selectedGender = 'Male';
   File? imageFile; // Initialize imageFile as nullable
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 
   DateTime _selectedDate = DateTime.now();
 
@@ -47,6 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             top: MediaQuery.of(context).size.height * 0.1,
           ),
           child: Form(
+            key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -55,6 +58,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFieldDesign(
                   hintText: 'Full Name',
                   labelText: 'Full Name',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your full Name';
+                    }
+                    return null; // Return null if the input is valid
+                  },
                   controller: firstNameController,
                   prefixIcon: const Icon(
                     Icons.person,
@@ -65,6 +74,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFieldDesign(
                   hintText: 'Email',
                   labelText: 'Email',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null; // Return null if the input is valid
+                  },
                   controller: emailController,
                   prefixIcon: const Icon(
                     Icons.email,
@@ -76,6 +91,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintText: 'Mobile Number',
                   labelText: 'Mobile Number',
                   controller: mobileController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your mobile number';
+                    }
+                    return null; // Return null if the input is valid
+                  },
                   prefixIcon: const Icon(
                     Icons.phone,
                     color: Colors.grey,
@@ -94,6 +115,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintText: 'Password',
                   labelText: 'Password',
                   isObscure: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null; // Return null if the input is valid
+                  },
                   controller: passwordController,
                   prefixIcon: const Icon(
                     Icons.password_sharp,
@@ -112,6 +139,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
+                          if(imageFile == null){
+                            showSnackbar(context, "Select Your Profile Image");
+                            return;
+                          }
                           var userName = firstNameController.text;
                           var email = emailController.text;
                           var mobile = mobileController.text;
@@ -196,7 +227,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         fit: BoxFit.cover,
                       )
                     : Image.asset(
-                        'assets/pimage.png',
+                        'assets/placeholder.png',
                         width: 120,
                         height: 120,
                         fit: BoxFit.cover,

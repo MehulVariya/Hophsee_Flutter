@@ -6,6 +6,7 @@ import 'package:hophseeflutter/data/module/categories.dart';
 import 'package:intl/intl.dart';
 
 import '../ui/dashboard/user_home_screen.dart';
+import '../ui/doctorpannel/doctor_home_screen.dart';
 
 void showSnackbar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).clearSnackBars();
@@ -35,6 +36,33 @@ void loginUser(ApiServiceImpl apiService, BuildContext context, String email,
     }
   }, onError: (error) {
     showSnackbar(context, "Something went wrong try again");
+  });
+}
+
+void doctorLogin(ApiServiceImpl apiService, BuildContext context, String email,
+    String password) {
+  apiService.loginDoctor(email, password).then((value) {
+    print("object ${value.toString()}");
+    if (value.error == 0) {
+      if (value.data?.doctorId != null) {
+        var doctor = value.data;
+        Preference.putDataUserDetails(
+            doctor?.doctorName, doctor?.imageUrl, doctor?.doctorId,
+            isDoctor: true);
+
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          DoctorHomeScreen.route,
+          (route) => false,
+        );
+      } else {
+        showSnackbar(context,"${value.message}");
+      }
+    } else {
+      showSnackbar(context, "invalid email or password");
+    }
+  }, onError: (error) {
+    showSnackbar(context, "invalid email or password");
   });
 }
 
