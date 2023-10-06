@@ -6,6 +6,7 @@ import 'package:hophseeflutter/data/module/doctor_login_model.dart';
 import 'package:hophseeflutter/data/module/doctor_model.dart';
 import 'package:hophseeflutter/data/module/payment_model.dart';
 import 'package:hophseeflutter/data/module/payment_page_required.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/constant.dart';
 import '../../core/utils.dart';
@@ -236,6 +237,12 @@ class ApiServiceImpl extends ApiService {
       data["payment_id"] = paymentId;
       data["appo_dt"] = convertToyyyymmdd(paymentPageRequired.appoDt ?? "");
       data["appo_time"] = paymentPageRequired.appoTime;
+     /* String date = convertToyyyymmdd(paymentPageRequired.appoDt ?? "");
+      String dateString = "$date${paymentPageRequired.appoTime}";
+      DateTime dateTime = DateTime.parse(dateString);
+      String isoTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
+      data["appo_dt"] = date;
+      data["appo_time"] = isoTime;*/
       data["is_approve"] = true;
 
       print("1>>>> appo_dt ${paymentPageRequired.appoDt}");
@@ -303,7 +310,8 @@ class ApiServiceImpl extends ApiService {
   }
 
   @override
-  Future<ResponseQuery> editDoctorProfile(int userId, String userName, String emailId, String phoneNumber, String gender) async{
+  Future<ResponseQuery> editDoctorProfile(int userId, String userName,
+      String emailId, String phoneNumber, String gender) async {
     try {
       Map<String, dynamic> data = {};
       data["doctor_id"] = userId;
@@ -321,7 +329,7 @@ class ApiServiceImpl extends ApiService {
         ),
       );
       ResponseQuery registerUserResponse =
-      ResponseQuery.fromJson(response.data);
+          ResponseQuery.fromJson(response.data);
       return registerUserResponse;
     } on Exception catch (error) {
       return ResponseQuery.fromJson(getErrorMap("Http Error"));
