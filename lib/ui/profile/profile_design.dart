@@ -174,7 +174,8 @@ class _ProfileDesignState extends State<ProfileDesign> {
                         Title: "settings",
                         icon: Icons.settings,
                         onPress: () {
-                          Navigator.pushNamed(context, SettingsPage.route);
+                       //   Navigator.pushNamed(context, SettingsPage.route);
+                          showSnackbar(context, "Coming soon...");
                         },
                       ),
                       ProfileMenu(

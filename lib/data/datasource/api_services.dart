@@ -45,6 +45,8 @@ abstract class ApiService {
 
   Future<ResponseQuery> editDoctorProfile(int userId, String userName,
       String emailId, String phoneNumber, String gender);
+
+  Future<ResponseQuery> removeAppointment(int appoId);
 }
 
 class ApiServiceImpl extends ApiService {
@@ -237,7 +239,7 @@ class ApiServiceImpl extends ApiService {
       data["payment_id"] = paymentId;
       data["appo_dt"] = convertToyyyymmdd(paymentPageRequired.appoDt ?? "");
       data["appo_time"] = paymentPageRequired.appoTime;
-     /* String date = convertToyyyymmdd(paymentPageRequired.appoDt ?? "");
+      /* String date = convertToyyyymmdd(paymentPageRequired.appoDt ?? "");
       String dateString = "$date${paymentPageRequired.appoTime}";
       DateTime dateTime = DateTime.parse(dateString);
       String isoTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime);
@@ -322,6 +324,25 @@ class ApiServiceImpl extends ApiService {
       final response = await dio.patch(
         doctorEp,
         data: data,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json', // Set the Content-Type header
+          },
+        ),
+      );
+      ResponseQuery registerUserResponse =
+          ResponseQuery.fromJson(response.data);
+      return registerUserResponse;
+    } on Exception catch (error) {
+      return ResponseQuery.fromJson(getErrorMap("Http Error"));
+    }
+  }
+
+  @override
+  Future<ResponseQuery> removeAppointment(int appoId) async {
+    try {
+      final response = await dio.delete(
+        "$appoEp/$appoId",
         options: Options(
           headers: {
             'Content-Type': 'application/json', // Set the Content-Type header

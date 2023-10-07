@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 40),
-              Row(children: [
+/*              Row(children: [
                 const Padding(
                   padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
                   child: Text("Forgot Your Login Details ?"),
@@ -160,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                 )
-              ]),
+              ]),*/
               // Forgot details
               const SizedBox(height: 10),
               Row(children: [

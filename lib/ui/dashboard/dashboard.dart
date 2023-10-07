@@ -61,7 +61,7 @@ class _MyHomeState extends State<MyHome> {
               const CustomAppBar(
                 backBtn: false,
               ),
-              Padding(
+  /*            Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
                 child: SizedBox(
                   width: 350,
@@ -81,7 +81,7 @@ class _MyHomeState extends State<MyHome> {
                     ),
                   ),
                 ),
-              ),
+              ),*/
               const Divider(),
               const Align(
                   alignment: Alignment.centerLeft,

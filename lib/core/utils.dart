@@ -121,6 +121,21 @@ Widget backArrow(BuildContext context) {
   );
 }
 
+String convertIsoToIndianDate(String isoDate) {
+  try {
+    final inputFormat = DateFormat('yyyy-MM-dd');
+    final outputFormat = DateFormat('yyyy-MM-dd', 'en_IN'); // 'en_IN' is the locale for Indian English
+
+    final date = inputFormat.parse(isoDate);
+    final indianDate = date.add(Duration(days: 1)); // Subtract one day
+
+    return outputFormat.format(indianDate);
+  } catch (e) {
+    print('Error converting date: $e');
+    return '';
+  }
+}
+
 String convertToyyyymmdd(String inputDate) {
   // Split the input date string into day, month, and year parts
   List<String> dateParts = inputDate.split('/');

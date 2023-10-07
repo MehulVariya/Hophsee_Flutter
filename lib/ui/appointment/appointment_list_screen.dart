@@ -105,9 +105,23 @@ class _AppointmentListScreenState extends State<AppointmentListScreen> {
                                     appo.doctorId // Provide a default value if the object is not found
                                 );
                             return AppointmentCard(
-                                appoDate: getENDate(appo.appoDt ?? ""),
+                                appoDate: convertIsoToIndianDate(appo.appoDt ?? ""),
                                 appoTime: appo.appoTime ?? "",
-                                doctorName: doctor?.doctorName ?? "");
+                                doctorName: doctor?.doctorName ?? "",onRemoveClick:(){
+                              showSnackbar(context, "Delete Tap");
+                              ApiServiceImpl(Dio())
+                                  .removeAppointment(appo.appoId ?? -1)
+                                  .then((value) {
+                                if (value.error == 0) {
+                                  showSnackbar(context, "Remove succesfully");
+                                  setState(() {
+
+                                  });
+                                } else {
+                                  showSnackbar(context, "Something went wrong");
+                                }
+                              });
+                            });
                           },
                         ),
                       ],
