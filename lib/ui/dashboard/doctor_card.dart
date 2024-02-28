@@ -1,162 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/constant.dart';
-import '../appointment/appo_book_screen.dart';
 
 class DoctorCard extends StatelessWidget {
-  DoctorCard({
+  const DoctorCard({
     Key? key,
     required this.name,
     required this.description,
-    required this.exp,
-    required this.degree,
     required this.imagePath,
-    required this.onTapDetails,
-    required this.onTapAppo,
-    this.DetailButton = true,
-    this.AppoButton = true,
+    required this.onPressed,
+    this.isOpenBookBtn = true,
   }) : super(key: key);
 
   final String name;
   final String description;
-  final String exp;
-  String degree;
   final String imagePath;
-  final VoidCallback onTapDetails;
-  final VoidCallback onTapAppo;
-  bool DetailButton;
-  bool AppoButton;
+  final VoidCallback onPressed;
+  final bool isOpenBookBtn;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
-      padding: EdgeInsets.all(20.w),
+      width: double.infinity,
+      height: 150,
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 2,
-            blurRadius: 10,
+            blurRadius: 5,
             offset: const Offset(0, 3),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  "$host/$imagePath",
-                  height: 150.h,
-                  width: double.infinity,
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Container(
+              width: 90,
+              height: 90,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                shape: BoxShape.rectangle,
+                image: DecorationImage(
+                  image: NetworkImage("$host/$imagePath"),
                   fit: BoxFit.cover,
                 ),
               ),
-              /*Positioned(
-                top: 10.h,
-                right: 10.w,
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade200,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    'Online',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),*/
-            ],
-          ),
-          SizedBox(height: 20.h),
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 5.h),
-          Text(
-            description,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.black87,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                if (isOpenBookBtn)
+                  ElevatedButton(
+                    onPressed: onPressed,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 8),
+                      primary: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: const Text(
+                      'Book',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+              ],
             ),
-          ),
-          SizedBox(height: 10.h),
-          Row(
-            children: [
-              Text(
-                'Exp: $exp',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                'Degree: $degree',
-                style: TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-          SizedBox(height: 20.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (DetailButton)
-                ElevatedButton(
-                  onPressed: onTapDetails,
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.lightBlueAccent.shade200,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-                  ),
-                  child: Text(
-                    'View Details',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              if (AppoButton)
-                ElevatedButton(
-                  onPressed: onTapAppo,
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.lightBlueAccent.shade200,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
-                  ),
-                  child: Text(
-                    'Get Appointment',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-            ],
           ),
         ],
       ),

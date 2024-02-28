@@ -44,6 +44,9 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
       child: Scaffold(
         body: Column(
           children: [
+            CustomAppBar(
+              backBtn: widget.isBack,
+            ),
             const SizedBox(
               height: 10,
             ),

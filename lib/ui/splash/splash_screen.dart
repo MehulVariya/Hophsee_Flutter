@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:hophseeflutter/core/constant.dart';
 import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
 import 'package:hophseeflutter/ui/home/login_screen.dart';
-import 'package:hophseeflutter/ui/welcomescreen/WelcomeScreen.dart';
 
 import '../../core/share_preference.dart';
 import '../../core/utils.dart';
@@ -24,12 +22,12 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   void displayContent(BuildContext context) async {
     Map<String, dynamic> data = await Preference.getLoginConfig();
-    String navigator = data[IS_LOGIN_PREFERENCE]
+    String navigate = data[IS_LOGIN_PREFERENCE]
         ? data[IS_DOCTOR_PREFERENCE]
             ? DoctorHomeScreen.route
             : UserHomeScreen.route
-        : WelcomeScreen.route;
-    Navigator.pushNamedAndRemoveUntil(context, navigator, (route) => false);
+        : LoginScreen.route;
+    Navigator.pushNamedAndRemoveUntil(context, navigate, (route) => false);
   }
 
   @override

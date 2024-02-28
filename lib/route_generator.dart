@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hophseeflutter/data/module/doctor_model.dart';
 import 'package:hophseeflutter/data/module/user_model.dart';
-import 'package:hophseeflutter/ui/appointment/appo_book_screen.dart';
 import 'package:hophseeflutter/ui/appointment/appointment_book_screen.dart';
 import 'package:hophseeflutter/ui/appointment/appointment_list_screen.dart';
 import 'package:hophseeflutter/ui/dashboard/user_home_screen.dart';
-import 'package:hophseeflutter/ui/doctordetails/doctor_details_sreen.dart';
 import 'package:hophseeflutter/ui/doctordetails/doctor_list_screen.dart';
 import 'package:hophseeflutter/ui/doctorpannel/doctor_dashboard.dart';
 import 'package:hophseeflutter/ui/doctorpannel/doctor_home_screen.dart';
@@ -18,7 +16,6 @@ import 'package:hophseeflutter/ui/profile/help_design.dart';
 import 'package:hophseeflutter/ui/profile/profile_design.dart';
 import 'package:hophseeflutter/ui/profile/setting.dart';
 import 'package:hophseeflutter/ui/splash/splash_screen.dart';
-import 'package:hophseeflutter/ui/welcomescreen/WelcomeScreen.dart';
 
 import 'data/module/payment_page_required.dart';
 
@@ -48,9 +45,6 @@ class RouteGenerator {
 
       case DoctorHomeScreen.route:
         return MaterialPageRoute(builder: (_) => const DoctorHomeScreen());
-
-      case WelcomeScreen.route:
-        return MaterialPageRoute(builder: (_) => WelcomeScreen());
 
       case PaymentDesign.route:
         return MaterialPageRoute(
@@ -85,18 +79,6 @@ class RouteGenerator {
       case AppointmentBookScreen.route:
         return MaterialPageRoute(
             builder: (_) => AppointmentBookScreen(
-                  doctor: args as Doctor,
-                ));
-
-      case AppointmentBookScreen2.route:
-        return MaterialPageRoute(
-            builder: (_) => AppointmentBookScreen2(
-                  doctor: args as Doctor,
-                ));
-
-      case DoctorDetailScreen.route:
-        return MaterialPageRoute(
-            builder: (_) => DoctorDetailScreen(
                   doctor: args as Doctor,
                 ));
 

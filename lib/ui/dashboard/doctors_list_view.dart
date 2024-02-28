@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hophseeflutter/ui/appointment/appo_book_screen.dart';
-import 'package:hophseeflutter/ui/doctordetails/doctor_details_sreen.dart';
 
+import '../../core/constant.dart';
 import '../../data/module/doctor_model.dart';
+import '../appointment/appointment_book_screen.dart';
 import 'doctor_card.dart';
 
 class DoctorsListView extends StatelessWidget {
@@ -12,10 +12,8 @@ class DoctorsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (data.isEmpty) {
-      return const Center(
-        child: Text("Doctor not Available"),
-      );
+    if(data.isEmpty){
+      return const Center(child: Text("Doctor not present"),);
     }
     return ListView.builder(
       scrollDirection: Axis.vertical,
@@ -27,15 +25,8 @@ class DoctorsListView extends StatelessWidget {
           name: "${doctor.doctorName}",
           description: "${doctor.briefDesc}",
           imagePath: doctor.imageUrl ?? "", // Use custom image
-          exp: '2 YEARS',
-          degree: 'M.B.B.S',
-          onTapDetails: () {
-            Navigator.pushNamed(context, DoctorDetailScreen.route,
-                arguments: doctor);
-          },
-          onTapAppo: () {
-            Navigator.pushNamed(context, AppointmentBookScreen2.route,
-                arguments: doctor);
+          onPressed: () {
+            Navigator.pushNamed(context, AppointmentBookScreen.route,arguments: doctor);
           },
         );
       },

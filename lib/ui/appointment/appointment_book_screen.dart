@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hophseeflutter/core/share_preference.dart';
 import 'package:hophseeflutter/data/module/payment_page_required.dart';
 import 'package:intl/intl.dart';
+
+import '../../core/constant.dart';
 import '../../core/widget/custome_app_bar.dart';
 import '../../data/module/doctor_model.dart';
 import '../dashboard/doctor_card.dart';
 import '../payment/payment_design.dart';
+import '../profile/profile_design.dart';
 
 class AppointmentBookScreen extends StatefulWidget {
   final Doctor doctor;
@@ -38,14 +42,11 @@ class _AppointmentDesignState extends State<AppointmentBookScreen> {
                   ),
                   const SizedBox(height: 10),
                   DoctorCard(
-                    name: widget.doctor.doctorName ?? "",
-                    description: widget.doctor.briefDesc ?? "",
-                    imagePath: widget.doctor.imageUrl ?? "",
-                    exp: '',
-                    degree: '',
-                    onTapDetails: () {},
-                    onTapAppo: () {},
-                  ),
+                      name: widget.doctor.doctorName ?? "",
+                      description: widget.doctor.briefDesc ?? "",
+                      imagePath: widget.doctor.imageUrl ?? "",
+                      isOpenBookBtn: false,
+                      onPressed: () {}),
                   const SizedBox(height: 10),
                   const Divider(
                     height: 2,

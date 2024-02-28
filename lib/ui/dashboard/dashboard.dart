@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hophseeflutter/core/utils.dart';
 import 'package:hophseeflutter/core/widget/common_label.dart';
 import 'package:hophseeflutter/core/widget/common_label_with_tap.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
@@ -9,8 +11,10 @@ import 'package:hophseeflutter/data/module/doctor_model.dart';
 import 'package:hophseeflutter/ui/dashboard/custom_ad.dart';
 import 'package:hophseeflutter/ui/dashboard/doctor_category_list.dart';
 import 'package:hophseeflutter/ui/dashboard/doctors_list_view.dart';
-import 'package:hophseeflutter/ui/dashboard/location_selection.dart';
+
+import '../../core/widget/custome_app_bar.dart';
 import '../doctordetails/doctor_list_screen.dart';
+import '../profile/profile_design.dart';
 
 class MyHome extends StatefulWidget {
   const MyHome({Key? key}) : super(key: key);
@@ -23,7 +27,7 @@ class _MyHomeState extends State<MyHome> {
   ApiServiceImpl apiService = ApiServiceImpl(Dio());
   DoctorList? doctorList;
   final StreamController<DoctorList?> _controller =
-      StreamController<DoctorList?>();
+  StreamController<DoctorList?>();
 
   // Getter to get the stream associated with this controller.
   Stream<DoctorList?> get stream => _controller.stream;
@@ -34,7 +38,7 @@ class _MyHomeState extends State<MyHome> {
     super.initState();
     if (doctorList == null) {
       apiService.getDoctorList().then(
-        (value) {
+            (value) {
           doctorList = value;
           _controller.sink.add(doctorList);
         },
@@ -54,45 +58,31 @@ class _MyHomeState extends State<MyHome> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              LocationSelectionScreen(),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15, right: 15, top: 5, bottom: 10),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.search,
+              const CustomAppBar(
+                backBtn: false,
+              ),
+  /*            Padding(
+                padding: const EdgeInsets.only(top: 5, bottom: 5),
+                child: SizedBox(
+                  width: 350,
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Search',
+                      labelText: 'Search',
+                      prefixIcon: Icon(
+                        Icons.search_outlined,
                         color: Colors.grey,
                       ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: TextField(
-                          style: TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                            hintText: 'Search...',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none,
-                          ),
-                        ),
+                      errorStyle: TextStyle(fontSize: 20.0),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                        borderRadius: BorderRadius.all(Radius.circular(9.0)),
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ),*/
+              const Divider(),
               const Align(
                   alignment: Alignment.centerLeft,
                   child: CommonLabel(displayText: "Categories")),
@@ -108,13 +98,14 @@ class _MyHomeState extends State<MyHome> {
                 stream: stream, // Access the custom stream
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    int numberOfIterate = 0;
-                    if ((snapshot.data?.data?.length ?? 0) < 3) {
-                      numberOfIterate = snapshot.data?.data?.length ?? 0;
+                    int numberOfItrate = 0;
+                    if ((snapshot.data?.data?.length ?? 0)
+                        <
+                        3) {
+                      numberOfItrate = snapshot.data?.data?.length ?? 0;
                     } else {
-                      numberOfIterate = 3;
-                    }
-                    ;
+                      numberOfItrate = 3;
+                    };
                     return Column(
                       children: [
                         Padding(
@@ -143,23 +134,21 @@ class _MyHomeState extends State<MyHome> {
                           width: double.infinity,
                           height: 170.h,
                           child: DoctorsListView(
-                            data: snapshot.data?.data
-                                    ?.sublist(0, numberOfIterate) ??
-                                [],
+                            data: snapshot.data?.data?.sublist(0,numberOfItrate) ?? [],
                           ),
                         ),
                       ],
                     );
                   }
                   return const Center(
-                    child: Text("Please wait.."),
+                    child: Text("Please wait..")
+                    ,
                   );
                 },
               ),
-              SizedBox(
-                height: 5.h,
-              ),
+              SizedBox(height: 5.h,),
               const Divider(),
+
               const Align(
                   alignment: Alignment.centerLeft,
                   child: CommonLabel(displayText: "About Us")),
@@ -167,9 +156,12 @@ class _MyHomeState extends State<MyHome> {
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
                 child: AdvertisementCard(),
               ),
-              SizedBox(
-                height: 10.h,
-              ),
+              SizedBox(height: 10.h,)
+              // Doctor list
+              /*  Expanded(
+                        child:
+                        ),
+                      ),*/
             ],
           ),
         ),

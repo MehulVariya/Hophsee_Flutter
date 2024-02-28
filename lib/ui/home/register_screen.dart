@@ -2,19 +2,17 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hophseeflutter/core/extfunction.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/share_preference.dart';
 import '../../core/utils.dart';
 import '../../core/widget/custom_text_field.dart';
 import '../../core/widget/date_picker.dart';
 import '../../data/datasource/api_services.dart';
 import '../../data/module/user_model.dart';
 import 'gender_drop_down.dart';
-import '../home/login_screen.dart'; // Import the login screen
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key});
@@ -35,6 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   File? imageFile; // Initialize imageFile as nullable
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+
   DateTime _selectedDate = DateTime.now();
 
   void handleGenderChange(String value) {
@@ -46,130 +45,109 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              /*Color(0xFF74ebd5),
-              Color(0xFFACB6E5),*/
-              Colors.lightBlueAccent.shade400,
-              Colors.white60,
-            ],
-          ),
-        ),
+      body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.1,
+            top: MediaQuery
+                .of(context)
+                .size
+                .height * 0.1,
           ),
-          child: Container(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 75),
-            child: Neumorphic(
-              style: NeumorphicStyle(
-                shape: NeumorphicShape.flat,
-                boxShape: NeumorphicBoxShape.roundRect(
-                  BorderRadius.circular(12),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                ProfileImagePicker(),
+                const SizedBox(height: 20),
+                TextFieldDesign(
+                  hintText: 'Full Name',
+                  labelText: 'Full Name',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your full Name';
+                    }
+                    return null; // Return null if the input is valid
+                  },
+                  controller: firstNameController,
+                  prefixIcon: const Icon(
+                    Icons.person,
+                    color: Colors.grey,
+                  ),
                 ),
-                depth: 8,
-                lightSource: LightSource.topLeft,
-                color: Colors.transparent,
-                intensity: 0.7,
-              ),
-              child: Container(
-                padding:
-                    EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    ProfileImagePicker(),
-                    const SizedBox(height: 20),
-                    TextFieldDesign(
-                      hintText: 'Full Name',
-                      labelText: 'Full Name',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your full Name';
-                        }
-                        return null; // Return null if the input is valid
-                      },
-                      controller: firstNameController,
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    TextFieldDesign(
-                      hintText: 'Email',
-                      labelText: 'Email',
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        } else if (!value.isValidEmail) {
-                          return 'Enter with valid email';
-                        }
-                        return null; // Return null if the input is valid
-                      },
-                      controller: emailController,
-                      prefixIcon: const Icon(
-                        Icons.email,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    TextFieldDesign(
-                      hintText: 'Mobile Number',
-                      labelText: 'Mobile Number',
-                      controller: mobileController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your mobile number';
-                        }
-                        return null; // Return null if the input is valid
-                      },
-                      prefixIcon: const Icon(
-                        Icons.phone,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    CustomDatePicker(
-                      onClick: () {
-                        hideKeyboard(context);
-                        pickDateDialog();
-                      },
-                      selectedDate: _selectedDate,
-                      onDateSelected:
-                          (DateTime) {}, // Pass the selected date here
-                    ),
-                    const SizedBox(height: 5),
-                    TextFieldDesign(
-                      hintText: 'Password',
-                      labelText: 'Password',
-                      isObscure: true,
-                      showPasswordIcon: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null; // Return null if the input is valid
-                      },
-                      controller: passwordController,
-                      prefixIcon: const Icon(
-                        Icons.password_sharp,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    GenderDropdownTextField(),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: NeumorphicButton(
+                const SizedBox(height: 5),
+                TextFieldDesign(
+                  hintText: 'Email',
+                  labelText: 'Email',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    } else if (!value.isValidEmail) {
+                      return 'Enter with valid email';
+                    }
+                    return null; // Return null if the input is valid
+                  },
+                  controller: emailController,
+                  prefixIcon: const Icon(
+                    Icons.email,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                TextFieldDesign(
+                  hintText: 'Mobile Number',
+                  labelText: 'Mobile Number',
+                  controller: mobileController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your mobile number';
+                    }
+                    return null; // Return null if the input is valid
+                  },
+                  prefixIcon: const Icon(
+                    Icons.phone,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                CustomDatePicker(
+                  onClick: () {
+                    hideKeyboard(context);
+                    pickDateDialog();
+                  },
+                  selectedDate: _selectedDate, // Pass the selected date here
+                ),
+                const SizedBox(height: 5),
+                TextFieldDesign(
+                  hintText: 'Password',
+                  labelText: 'Password',
+                  isObscure: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null; // Return null if the input is valid
+                  },
+                  controller: passwordController,
+                  prefixIcon: const Icon(
+                    Icons.password_sharp,
+                    color: Colors.black87,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: GenderDropdown(),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: SizedBox(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.5,
+                      height: 50,
+                      child: ElevatedButton(
                         onPressed: () {
                           if (imageFile == null) {
                             showSnackbar(context, "Select Your Profile Image");
@@ -181,7 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           var password = passwordController.text;
                           var gender = selectedGender;
                           var dateOfBirth =
-                              DateFormat("yyyy-MM-dd").format(_selectedDate);
+                          DateFormat("yyyy-MM-dd").format(_selectedDate);
                           var user = User(
                             userName: userName,
                             emailId: email,
@@ -191,51 +169,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             dateOfBirth: dateOfBirth,
                           );
                           print("user : ${user.toJson()}");
-                          apiService.registerUser(user, imageFile!).then(
-                            (value) {
-                              if (value.error == 0) {
-                                // Successfully registered, navigate to login screen
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  LoginScreen.route,
-                                );
-                              } else {
-                                showSnackbar(context, "Something went wrong");
-                              }
-                            },
-                            onError: (error) {
-                              print(error);
+                          apiService.registerUser(user, imageFile!)
+                              .then((value) {
+                            if (value.error == 0) {
+                              // Successfully registered, perform login or other actions
+                              loginUser(apiService, context, email, password);
+                            } else {
                               showSnackbar(context, "Something went wrong");
-                            },
-                          );
+                            }
+                          }, onError: (error) {
+                            print(error);
+                            showSnackbar(context, "Something went wrong");
+                          });
                         },
-                        style: NeumorphicStyle(
-                          color: Colors.lightBlueAccent.shade200,
-                          shape: NeumorphicShape.convex,
-                          boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(25),
-                          ),
-                          depth: 8,
-                          intensity: 0.7,
-                          //color: Colors.blueAccent[200],
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.lightBlueAccent,
+                          side: BorderSide.none,
+                          shape: const StadiumBorder(),
                         ),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 3.h,
-                            horizontal: 30.w,
-                          ),
-                          child: Text(
-                            'Register',
-                            style:
-                                TextStyle(fontSize: 18.sp, color: Colors.black),
+                        child: const Text(
+                          'Register',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                  ],
+                  ),
                 ),
-              ),
+                const SizedBox(height: 20),
+              ],
             ),
           ),
         ),
@@ -267,17 +231,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ClipOval(
                 child: imageFile != null
                     ? Image.file(
-                        imageFile!,
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      )
+                  imageFile!,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                )
                     : Image.asset(
-                        'assets/placeholder.png',
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      ),
+                  'assets/placeholder.png',
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                ),
               ),
               Align(
                 alignment: Alignment.bottomRight,

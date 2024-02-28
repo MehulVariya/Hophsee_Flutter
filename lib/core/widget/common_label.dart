@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CommonLabel extends StatelessWidget {
   final String displayText;
@@ -12,10 +11,8 @@ class CommonLabel extends StatelessWidget {
         padding: const EdgeInsets.only(left: 15),
         child: Text(
           displayText,
-          style: GoogleFonts.alata(
-            // Use the same font for consistency
+          style: const TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ));
