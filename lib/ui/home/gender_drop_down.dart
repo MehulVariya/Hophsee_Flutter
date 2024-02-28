@@ -1,59 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 
-class GenderDropdown extends StatefulWidget {
-  const GenderDropdown({Key? key});
+class GenderDropdownTextField extends StatefulWidget {
+  const GenderDropdownTextField({Key? key}) : super(key: key);
 
   @override
-  _GenderDropdownState createState() {
-    return _GenderDropdownState();
-  }
+  _GenderDropdownTextFieldState createState() =>
+      _GenderDropdownTextFieldState();
 }
 
-class _GenderDropdownState extends State<GenderDropdown> {
-  String selectedGender = 'Male'; // Default selection
+class _GenderDropdownTextFieldState extends State<GenderDropdownTextField> {
+  String selectedGender = 'Select Your Gender'; // Default selection
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          margin: const EdgeInsets.only(left: 10, right: 10),
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey,
-              style: BorderStyle.solid,
-            ),
-            borderRadius: BorderRadius.circular(9.0),
-          ),
-          child: Row(
-            children: [
-              const Text(
-                'Select Your Gender:',
-                style: TextStyle(fontSize: 16),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Neumorphic(
+        style: NeumorphicStyle(
+          shape: NeumorphicShape.flat,
+          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
+          depth: 4,
+          intensity: 0.5,
+          lightSource: LightSource.topLeft,
+        ),
+        child: TextFormField(
+          readOnly: true,
+          onTap: _pickGenderDialog,
+          controller: TextEditingController(text: selectedGender),
+          decoration: InputDecoration(
+            hintText: 'Select Your Gender',
+            hintStyle: TextStyle(color: Colors.grey),
+            prefixIcon: InkWell(
+              onTap: _pickGenderDialog,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: NeumorphicIcon(
+                  Icons.male,
+                  style: NeumorphicStyle(
+                    color: Colors.grey,
+                    depth: 4,
+                    intensity: 0.5,
+                    lightSource: LightSource.topLeft,
+                  ),
+                ),
               ),
-              DropdownButton<String>(
-                value: selectedGender,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedGender = newValue!;
-                  });
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickGenderDialog() async {
+    // You can show a gender selection dialog or navigate to another screen for selection.
+    // For simplicity, I'll use a basic dialog for demonstration.
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Gender'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                title: Text('Male'),
+                onTap: () {
+                  _updateSelectedGender('Male');
+                  Navigator.of(context).pop();
                 },
-                items: <String>[
-                  'Male',
-                  'Female',
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              ),
+              ListTile(
+                title: Text('Female'),
+                onTap: () {
+                  _updateSelectedGender('Female');
+                  Navigator.of(context).pop();
+                },
               ),
             ],
           ),
-        ),
-      ],
+        );
+      },
     );
+  }
+
+  void _updateSelectedGender(String gender) {
+    setState(() {
+      selectedGender = gender;
+    });
   }
 }

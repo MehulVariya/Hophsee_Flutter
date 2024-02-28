@@ -1,5 +1,6 @@
-const host = "http://192.168.73.108:8000";
+const host = "https://node-hophsee.onrender.com";
 
+//const host = "http://192.168.2.172:8000";
 
 const userEp = "$host/users";
 const loginUserEp = "$userEp/login";

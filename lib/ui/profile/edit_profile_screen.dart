@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hophseeflutter/core/constant.dart';
 import 'package:hophseeflutter/core/share_preference.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
@@ -94,83 +96,100 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              backArrow(context),
-              SizedBox(height: 20),
-              CircleAvatar(
-                radius: 60.0,
-                backgroundImage: NetworkImage(
-                    "$host/${widget.isDoctor ? doctor?.imageUrl : user?.imageUrl}"),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 250.h,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF6BB7E1), Color(0xFFAEDFF7)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
               ),
-              SizedBox(height: 10),
-              /*    ElevatedButton.icon(
-                onPressed: () {
-                  // Add logic to edit profile photo here
-                },
-                icon: Icon(Icons.edit),
-                label: Text('Edit Photo'),
-              ),*/
-              _buildEditableCard(
-                context,
-                'Name',
-                name,
-                (newValue) => setState(() => name = newValue),
+              child: Center(
+                child: Container(
+                  margin: EdgeInsets.only(top: 80.h),
+                  child: CircleAvatar(
+                    radius: 60.0,
+                    backgroundImage: NetworkImage(
+                        "$host/${widget.isDoctor ? doctor?.imageUrl : user?.imageUrl}"),
+                  ),
+                ),
               ),
-              /* _buildEditableCard(
-                context,
-                'Last Name',
-                lastName,
-                (newValue) => setState(() => lastName = newValue),
-              ),*/
-              _buildEditableCard(
-                context,
-                'Mobile Number',
-                mobileNumber,
-                (newValue) => setState(() => mobileNumber = newValue),
-              ),
-              _buildEditableCard(
-                context,
-                'Email Address',
-                emailAddress,
-                (newValue) => setState(() => emailAddress = newValue),
-              ),
-              _buildEditableCard(
-                context,
-                'Gender',
-                gender,
-                (newValue) => setState(() => gender = newValue),
-                isGenderField: true,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (widget.isDoctor) {
-                    Doctor doctor1 = Doctor(
-                        doctorId: doctor?.doctorId,
-                        doctorName: name,
-                        phoneNo: mobileNumber,
-                        emailId: emailAddress,
-                        gender: gender.substring(0, 1));
-                    _showSaveAllDialog(context, doctor: doctor1);
-                  } else {
-                    User user1 = User(
-                        userId: user?.userId,
-                        userName: name,
-                        phoneNo: mobileNumber,
-                        emailId: emailAddress,
-                        gender: gender.substring(0, 1));
-                    _showSaveAllDialog(context, user: user1);
-                  }
-                },
-                child: Text('Save All'),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 10),
+            /*    ElevatedButton.icon(
+              onPressed: () {
+                // Add logic to edit profile photo here
+              },
+              icon: Icon(Icons.edit),
+              label: Text('Edit Photo'),
+            ),*/
+            SizedBox(
+              height: 20,
+            ),
+            _buildEditableCard(
+              context,
+              'Name',
+              name,
+              (newValue) => setState(() => name = newValue),
+            ),
+            /* _buildEditableCard(
+              context,
+              'Last Name',
+              lastName,
+              (newValue) => setState(() => lastName = newValue),
+            ),*/
+            _buildEditableCard(
+              context,
+              'Mobile Number',
+              mobileNumber,
+              (newValue) => setState(() => mobileNumber = newValue),
+            ),
+            _buildEditableCard(
+              context,
+              'Email Address',
+              emailAddress,
+              (newValue) => setState(() => emailAddress = newValue),
+            ),
+            _buildEditableCard(
+              context,
+              'Gender',
+              gender,
+              (newValue) => setState(() => gender = newValue),
+              isGenderField: true,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (widget.isDoctor) {
+                  Doctor doctor1 = Doctor(
+                      doctorId: doctor?.doctorId,
+                      doctorName: name,
+                      phoneNo: mobileNumber,
+                      emailId: emailAddress,
+                      gender: gender.substring(0, 1));
+                  _showSaveAllDialog(context, doctor: doctor1);
+                } else {
+                  User user1 = User(
+                      userId: user?.userId,
+                      userName: name,
+                      phoneNo: mobileNumber,
+                      emailId: emailAddress,
+                      gender: gender.substring(0, 1));
+                  _showSaveAllDialog(context, user: user1);
+                }
+              },
+              child: Text('Save All'),
+            ),
+          ],
         ),
       ),
     );
@@ -191,8 +210,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _showEditDialog(context, title, subtitle, onEdit);
         }
       },
-      child: Card(
-        elevation: 4.0,
+      child: Neumorphic(
+        style: NeumorphicStyle(
+          shape: NeumorphicShape.flat,
+          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(50)),
+          depth: 8,
+          intensity: 0.7,
+          color: Colors.white,
+        ),
+        margin: EdgeInsets.symmetric(vertical: 7, horizontal: 16),
         child: ListTile(
           leading: Icon(
             leadingIcons[title] ?? Icons.person,
@@ -305,7 +331,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Preference.putDataString(
                           NAME_PREFERENCE, doctor?.doctorName ?? "");
                       Navigator.pop(context);
-
                     } else {
                       showSnackbar(context, "Something went wrong");
                     }
@@ -326,7 +351,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Preference.putDataString(
                           NAME_PREFERENCE, user?.userName ?? "");
                       Navigator.pop(context);
-
                     } else {
                       showSnackbar(context, "Something went wrong");
                     }
