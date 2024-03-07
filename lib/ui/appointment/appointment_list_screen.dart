@@ -7,8 +7,10 @@ import 'package:hophseeflutter/core/share_preference.dart';
 import 'package:hophseeflutter/data/datasource/api_services.dart';
 import 'package:hophseeflutter/data/module/appo_model.dart';
 import 'package:hophseeflutter/data/module/doctor_model.dart';
+import 'package:hophseeflutter/ui/appointment/appointment_type.dart';
 
 import '../../core/utils.dart';
+import '../../core/widget/custome_app_bar.dart';
 import 'appointment_card.dart';
 
 class AppointmentListScreen extends StatefulWidget {
@@ -73,71 +75,81 @@ class _AppointmentListScreenState extends State<AppointmentListScreen> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: StreamBuilder<Map<String, dynamic>>(
-              stream: stream, // Access the custom stream
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  Map<String, dynamic>? data = snapshot.data;
-                  print("object $data");
-                  if (data?["isEmptyData"] == true) {
-                    return const Center(
-                      child: Text("Empty Appoinment"),
-                    );
-                  }
-                  List<Appo>? appoList =
-                      AppoList.fromJson(data?["appolist"]).data;
-                  if (appoList != null && appoList.isNotEmpty) {
-                    List<Doctor>? doctorList =
-                        DoctorList.fromJson(data?["doctorList"]).data;
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 16),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: appoList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            Appo? appo = appoList[index];
-                            Doctor? doctor = doctorList?.firstWhere((obj) =>
-                                    obj.doctorId ==
-                                    appo.doctorId // Provide a default value if the object is not found
-                                );
-                            return AppointmentCard(
-                                appoDate: convertIsoToIndianDate(appo.appoDt ?? ""),
-                                appoTime: appo.appoTime ?? "",
-                                doctorName: doctor?.doctorName ?? "",onRemoveClick:(){
-                              showSnackbar(context, "Delete Tap");
-                              ApiServiceImpl(Dio())
-                                  .removeAppointment(appo.appoId ?? -1)
-                                  .then((value) {
-                                if (value.error == 0) {
-                                  showSnackbar(context, "Remove succesfully");
-                                  setState(() {
-
-                                  });
-                                } else {
-                                  showSnackbar(context, "Something went wrong");
-                                }
-                              });
-                            });
-                          },
-                        ),
-                      ],
-                    );
-                  } else {
-                    return const Center(
-                      child: Text("Empty Appointment"),
-                    );
-                  }
-                } else {
-                  return Center(
-                    child: Text("Loading..."),
-                  );
-                }
-              },
-            ),
+          child: Column(
+            children: [
+              CustomAppbar2(
+                label: 'My Appointments',
+              ),
+              AppointmentScheduler(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: StreamBuilder<Map<String, dynamic>>(
+                  stream: stream, // Access the custom stream
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      Map<String, dynamic>? data = snapshot.data;
+                      print("object $data");
+                      if (data?["isEmptyData"] == true) {
+                        return const Center(
+                          child: Text("Empty Appoinment"),
+                        );
+                      }
+                      List<Appo>? appoList =
+                          AppoList.fromJson(data?["appolist"]).data;
+                      if (appoList != null && appoList.isNotEmpty) {
+                        List<Doctor>? doctorList =
+                            DoctorList.fromJson(data?["doctorList"]).data;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 16),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: appoList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Appo? appo = appoList[index];
+                                Doctor? doctor = doctorList?.firstWhere((obj) =>
+                                        obj.doctorId ==
+                                        appo.doctorId // Provide a default value if the object is not found
+                                    );
+                                return AppointmentCard(
+                                    appoDate: convertIsoToIndianDate(
+                                        appo.appoDt ?? ""),
+                                    appoTime: appo.appoTime ?? "",
+                                    doctorName: doctor?.doctorName ?? "",
+                                    onRemoveClick: () {
+                                      showSnackbar(context, "Delete Tap");
+                                      ApiServiceImpl(Dio())
+                                          .removeAppointment(appo.appoId ?? -1)
+                                          .then((value) {
+                                        if (value.error == 0) {
+                                          showSnackbar(
+                                              context, "Remove succesfully");
+                                          setState(() {});
+                                        } else {
+                                          showSnackbar(
+                                              context, "Something went wrong");
+                                        }
+                                      });
+                                    });
+                              },
+                            ),
+                          ],
+                        );
+                      } else {
+                        return const Center(
+                          child: Text("Empty Appointment"),
+                        );
+                      }
+                    } else {
+                      return Center(
+                        child: Text("Loading..."),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

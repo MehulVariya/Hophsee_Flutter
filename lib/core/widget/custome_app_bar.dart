@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hophseeflutter/core/widget/common_label.dart';
 import 'package:hophseeflutter/ui/profile/profile_design.dart';
 
 import '../share_preference.dart';
@@ -125,5 +126,61 @@ class _CustomAppBarState extends State<CustomAppBar> {
     super.dispose();
     _controller.close();
     _image_controller.close();
+  }
+}
+
+class CustomAppbar2 extends StatefulWidget {
+  const CustomAppbar2({
+    Key? key,
+    required this.label,
+    this.backBtn = true,
+  }) : super(key: key);
+  final bool backBtn;
+  final String label;
+
+  @override
+  _CustomAppbar2State createState() => _CustomAppbar2State();
+}
+
+class _CustomAppbar2State extends State<CustomAppbar2> {
+  TextEditingController locationController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned(
+          left: 15,
+          top: 0,
+          child: Column(
+            children: [
+              if (widget.backBtn)
+                InkWell(
+                  child: const Icon(
+                    Icons.arrow_back_outlined,
+                    size: 25,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+            ],
+          ),
+        ),
+        Container(
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(child: CommonLabel(displayText: widget.label)),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

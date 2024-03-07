@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter/material.dart';
 import 'package:hophseeflutter/ui/appointment/appointment_list_screen.dart';
 import 'package:hophseeflutter/ui/doctorpannel/doctor_dashboard.dart';
 import '../appointment/appointment_book_screen.dart';
@@ -57,7 +57,7 @@ class _HomeState extends State<DoctorHomeScreen> {
         widget = DoctorDashboardScreen();
         break;
       case 1:
-        widget = const ProfileDesign(isNotBackArrow: false);
+        widget = ProfileDesign(isNotBackArrow: false);
         break;
       default:
         widget = DoctorDashboardScreen();

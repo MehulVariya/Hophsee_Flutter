@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hophseeflutter/core/utils.dart';
 import 'package:hophseeflutter/ui/payment/payment_bottom_sheet.dart';
-import 'package:hophseeflutter/ui/payment/payment_done.dart';
 
 import '../../data/module/payment_page_required.dart';
-import '../appointment/appointment_book_screen.dart';
 
 class PaymentDesign extends StatefulWidget {
   final PaymentPageRequired paymentPageRequired;
-  const PaymentDesign({
-    super.key,required this.paymentPageRequired
-  });
+  const PaymentDesign({super.key, required this.paymentPageRequired});
 
   static const route = '/payment_screen';
 
@@ -97,20 +93,20 @@ class _PaymentDesignState extends State<PaymentDesign> {
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return PaymentBottomSheet(
-                                    formKey: _formKey,
-                                    cardNumberController: _cardNumberController,
-                                    expiryDateController: _expiryDateController,
-                                    cvvController: _cvvController,
-                                    paymentPageRequired : widget.paymentPageRequired,
-                                    amount:
-                                        500 /*int.parse(_amountController.text)*/);
-                              },
-                            );
-
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return PaymentBottomSheet(
+                                  formKey: _formKey,
+                                  cardNumberController: _cardNumberController,
+                                  expiryDateController: _expiryDateController,
+                                  cvvController: _cvvController,
+                                  paymentPageRequired:
+                                      widget.paymentPageRequired,
+                                  amount:
+                                      500 /*int.parse(_amountController.text)*/);
+                            },
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
